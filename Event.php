@@ -11,10 +11,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42;
+namespace Plugin\TwoFactorAuthCustomer44;
 
 use Eccube\Event\TemplateEvent;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthTypeRepository;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -51,15 +51,15 @@ class Event implements EventSubscriberInterface
      *
      * @param TemplateEvent $event
      */
-    public function onRenderAdminShopSettingEdit(TemplateEvent $event)
+    public function onRenderAdminShopSettingEdit(TemplateEvent $event): void
     {
         // add 本人確認認証 twig
-        $twig = 'TwoFactorAuthCustomer42/Resource/template/admin/shop_edit_sms.twig';
+        $twig = '@TwoFactorAuthCustomer44/admin/shop_edit_sms.twig';
         $event->addSnippet($twig);
 
         if ($this->hasActiveAuthType) {
             // add ２段階認証設定 twig
-            $twig = 'TwoFactorAuthCustomer42/Resource/template/admin/shop_edit_tfa.twig';
+            $twig = '@TwoFactorAuthCustomer44/admin/shop_edit_tfa.twig';
             $event->addSnippet($twig);
         }
     }
@@ -70,10 +70,10 @@ class Event implements EventSubscriberInterface
      *
      * @param TemplateEvent $event
      */
-    public function onRenderAdminCustomerEdit(TemplateEvent $event)
+    public function onRenderAdminCustomerEdit(TemplateEvent $event): void
     {
         // add twig
-        $twig = 'TwoFactorAuthCustomer42/Resource/template/admin/customer_edit.twig';
+        $twig = '@TwoFactorAuthCustomer44/admin/customer_edit.twig';
         $event->addSnippet($twig);
     }
 }

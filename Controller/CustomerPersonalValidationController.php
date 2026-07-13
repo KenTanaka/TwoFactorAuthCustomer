@@ -11,21 +11,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Controller;
+namespace Plugin\TwoFactorAuthCustomer44\Controller;
 
-use Eccube\Common\Constant;
 use Eccube\Controller\AbstractController;
 use Eccube\Entity\Customer;
 use Eccube\Repository\CustomerRepository;
-use Plugin\TwoFactorAuthCustomer42\Form\Type\TwoFactorAuthPhoneNumberTypeCustomer;
-use Plugin\TwoFactorAuthCustomer42\Form\Type\TwoFactorAuthSmsTypeCustomer;
-use Plugin\TwoFactorAuthCustomer42\Service\CustomerTwoFactorAuthService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Plugin\TwoFactorAuthCustomer44\Form\Type\TwoFactorAuthPhoneNumberTypeCustomer;
+use Plugin\TwoFactorAuthCustomer44\Form\Type\TwoFactorAuthSmsTypeCustomer;
+use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -37,51 +36,31 @@ use Twilio\Rest\Api\V2010\Account\MessageInstance;
 class CustomerPersonalValidationController extends AbstractController
 {
     /**
-     * @var CustomerRepository
-     */
-    protected CustomerRepository $customerRepository;
-
-    /**
-     * @var CustomerTwoFactorAuthService
-     */
-    protected CustomerTwoFactorAuthService $customerTwoFactorAuthService;
-
-    /**
-     * @var Environment
-     */
-    protected Environment $twig;
-    private RateLimiterFactory $deviceAuthRequestEmailLimiter;
-
-    /**
      * TwoFactorAuthCustomerController constructor.
      *
-     * @param CustomerRepository $customerRepository ,
-     * @param CustomerTwoFactorAuthService $customerTwoFactorAuthService ,
+     * @param RateLimiterFactory $deviceAuthRequestEmailLimiter
+     * @param CustomerRepository $customerRepository
+     * @param CustomerTwoFactorAuthService $customerTwoFactorAuthService
      * @param Environment $twig
      */
     public function __construct(
-        RateLimiterFactory $deviceAuthRequestEmailLimiter,
-        CustomerRepository $customerRepository,
-        CustomerTwoFactorAuthService $customerTwoFactorAuthService,
-        Environment $twig
+        private RateLimiterFactory $deviceAuthRequestEmailLimiter,
+        protected CustomerRepository $customerRepository,
+        protected CustomerTwoFactorAuthService $customerTwoFactorAuthService,
+        protected Environment $twig,
     ) {
-        $this->customerRepository = $customerRepository;
-        $this->customerTwoFactorAuthService = $customerTwoFactorAuthService;
-        $this->twig = $twig;
-        $this->deviceAuthRequestEmailLimiter = $deviceAuthRequestEmailLimiter;
     }
 
     /**
      * (デバイス認証時)デバイス認証ワンタイムトークン入力画面.
      *
-     * @Route("/two_factor_auth/device_auth/input_onetime/{secret_key}", name="plg_customer_2fa_device_auth_input_onetime", requirements={"secret_key" = "^[a-zA-Z0-9]+$"}, methods={"GET", "POST"})
-     * @Template("TwoFactorAuthCustomer42/Resource/template/default/device_auth/input.twig")
-     *
      * @param Request $request
-     * @param $secret_key
+     * @param string $secret_key
      *
      * @return array|RedirectResponse
      */
+    #[Route(path: '/two_factor_auth/device_auth/input_onetime/{secret_key}', name: 'plg_customer_2fa_device_auth_input_onetime', requirements: ['secret_key' => '^[a-zA-Z0-9]+$'], methods: ['GET', 'POST'])]
+    #[Template('@TwoFactorAuthCustomer44/default/device_auth/input.twig')]
     public function deviceAuthInputOneTime(Request $request, $secret_key)
     {
         if ($this->isGranted('ROLE_USER')) {
@@ -155,11 +134,8 @@ class CustomerPersonalValidationController extends AbstractController
     /**
      * (デバイス認証時)デバイス認証 送信先入力画面.
      *
-     * @Route("/two_factor_auth/device_auth/send_onetime/{secret_key}", name="plg_customer_2fa_device_auth_send_onetime", requirements={"secret_key" = "^[a-zA-Z0-9]+$"}, methods={"GET", "POST"})
-     * @Template("TwoFactorAuthCustomer42/Resource/template/default/device_auth/send.twig")
-     *
      * @param Request $request
-     * @param $secret_key
+     * @param string $secret_key
      *
      * @return array|RedirectResponse
      *
@@ -169,6 +145,8 @@ class CustomerPersonalValidationController extends AbstractController
      * @throws SyntaxError
      * @throws TwilioException
      */
+    #[Route(path: '/two_factor_auth/device_auth/send_onetime/{secret_key}', name: 'plg_customer_2fa_device_auth_send_onetime', requirements: ['secret_key' => '^[a-zA-Z0-9]+$'], methods: ['GET', 'POST'])]
+    #[Template('@TwoFactorAuthCustomer44/default/device_auth/send.twig')]
     public function deviceAuthSendOneTime(Request $request, $secret_key)
     {
         if ($this->isGranted('ROLE_USER')) {
@@ -228,10 +206,10 @@ class CustomerPersonalValidationController extends AbstractController
     /**
      * デバイス認証用のワンタイムトークンチェック.
      *
-     * @param $Customer
-     * @param $token
+     * @param Customer $Customer
+     * @param string $token
      *
-     * @return boolean
+     * @return bool
      */
     private function checkDeviceToken($Customer, $token): bool
     {
@@ -271,7 +249,7 @@ class CustomerPersonalValidationController extends AbstractController
         $this->entityManager->flush();
 
         // ワンタイムトークン送信メッセージをレンダリング
-        $twig = 'TwoFactorAuthCustomer42/Resource/template/default/sms/onetime_message.twig';
+        $twig = '@TwoFactorAuthCustomer44/default/sms/onetime_message.twig';
         $body = $this->twig->render($twig, [
             'Customer' => $Customer,
             'token' => $token,

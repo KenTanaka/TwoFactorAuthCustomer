@@ -11,14 +11,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\EventListener;
+namespace Plugin\TwoFactorAuthCustomer44\EventListener;
 
 use Eccube\Entity\BaseInfo;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Repository\CustomerRepository;
 use Eccube\Request\Context;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthTypeRepository;
-use Plugin\TwoFactorAuthCustomer42\Service\CustomerTwoFactorAuthService;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
+use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;

@@ -11,23 +11,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Service;
+namespace Plugin\TwoFactorAuthCustomer44\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Common\EccubeConfig;
 use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Customer;
 use Eccube\Repository\BaseInfoRepository;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthCustomerCookie;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthConfigRepository;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthCustomerCookieRepository;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthConfig;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthCustomerCookie;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthConfigRepository;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthCustomerCookieRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
@@ -52,10 +52,6 @@ class CustomerTwoFactorAuthService
      * @var EccubeConfig
      */
     protected $eccubeConfig;
-    /**
-     * @var EncoderFactoryInterface
-     */
-    protected $encoderFactory;
     /**
      * @var RequestStack
      */

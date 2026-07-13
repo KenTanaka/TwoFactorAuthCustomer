@@ -11,13 +11,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Form\Type\Extension\Admin;
+namespace Plugin\TwoFactorAuthCustomer44\Form\Type\Extension\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Form\Type\Admin\CustomerType;
 use Eccube\Form\Type\PhoneNumberType;
 use Eccube\Form\Type\ToggleSwitchType;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthType;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -56,7 +56,7 @@ class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (!empty($options['skip_add_form'])) {
             return;

@@ -11,63 +11,43 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Entity;
+namespace Plugin\TwoFactorAuthCustomer44\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Eccube\Entity\AbstractEntity;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthConfigRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * TwoFactorConfig
- *
- * @ORM\Table(name="plg_two_factor_auth_config")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discriminator_type", type="string", length=255)
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthConfigRepository")
- * @UniqueEntity("id")
  */
+#[ORM\Table(name: 'plg_two_factor_auth_config')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'discriminator_type', type: Types::STRING, length: 255)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: TwoFactorAuthConfigRepository::class)]
+#[UniqueEntity('id')]
 class TwoFactorAuthConfig extends AbstractEntity
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", options={"unsigned":true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER, options: ['unsigned' => true])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="api_key", type="string", nullable=true, length=200)
-     */
-    private $api_key = null;
+    #[ORM\Column(name: 'api_key', type: Types::STRING, nullable: true, length: 200)]
+    private ?string $api_key = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="api_secret", type="string", nullable=true, length=200)
-     */
-    private $api_secret = null;
+    #[ORM\Column(name: 'api_secret', type: Types::STRING, nullable: true, length: 200)]
+    private ?string $api_secret = null;
 
-    private $plain_api_secret;
+    private ?string $plain_api_secret = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="from_phone_number", type="string", nullable=true, length=200)
-     */
-    private $from_phone_number = null;
+    #[ORM\Column(name: 'from_phone_number', type: Types::STRING, nullable: true, length: 200)]
+    private ?string $from_phone_number = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="include_routes", type="text", nullable=true)
-     */
-    private $include_routes = null;
+    #[ORM\Column(name: 'include_routes', type: Types::TEXT, nullable: true)]
+    private ?string $include_routes = null;
 
     /**
      * Constructor.
@@ -78,20 +58,16 @@ class TwoFactorAuthConfig extends AbstractEntity
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Get api_key.
-     *
-     * @return string
      */
-    public function getApiKey()
+    public function getApiKey(): ?string
     {
         return $this->api_key;
     }
@@ -99,11 +75,9 @@ class TwoFactorAuthConfig extends AbstractEntity
     /**
      * Set api_key.
      *
-     * @param string $apiKey
-     *
-     * @return TwoFactorAuthConfig
+     * @return $this
      */
-    public function setApiKey($apiKey)
+    public function setApiKey(?string $apiKey): self
     {
         $this->api_key = $apiKey;
 
@@ -112,10 +86,8 @@ class TwoFactorAuthConfig extends AbstractEntity
 
     /**
      * Get api_secret.
-     *
-     * @return string
      */
-    public function getApiSecret()
+    public function getApiSecret(): ?string
     {
         return $this->api_secret;
     }
@@ -123,11 +95,9 @@ class TwoFactorAuthConfig extends AbstractEntity
     /**
      * Set api_secret.
      *
-     * @param string $apiSecret
-     *
-     * @return TwoFactorAuthConfig
+     * @return $this
      */
-    public function setApiSecret($apiSecret)
+    public function setApiSecret(?string $apiSecret): self
     {
         $this->api_secret = $apiSecret;
 
@@ -136,10 +106,8 @@ class TwoFactorAuthConfig extends AbstractEntity
 
     /**
      * Get from phone number.
-     *
-     * @return string
      */
-    public function getFromPhoneNumber()
+    public function getFromPhoneNumber(): ?string
     {
         return $this->from_phone_number;
     }
@@ -147,18 +115,19 @@ class TwoFactorAuthConfig extends AbstractEntity
     /**
      * Set from phone number.
      *
-     * @param string $fromPhoneNumber
-     *
-     * @return TwoFactorAuthConfig
+     * @return $this
      */
-    public function setFromPhoneNumber(string $fromPhoneNumber)
+    public function setFromPhoneNumber(string $fromPhoneNumber): self
     {
         $this->from_phone_number = $fromPhoneNumber;
 
         return $this;
     }
 
-    public function addIncludeRoute(string $route)
+    /**
+     * @return $this
+     */
+    public function addIncludeRoute(string $route): self
     {
         $routes = $this->getRoutes($this->getIncludeRoutes());
 
@@ -180,10 +149,8 @@ class TwoFactorAuthConfig extends AbstractEntity
 
     /**
      * Get include_routes.
-     *
-     * @return string|null
      */
-    public function getIncludeRoutes()
+    public function getIncludeRoutes(): ?string
     {
         return $this->include_routes;
     }
@@ -191,18 +158,19 @@ class TwoFactorAuthConfig extends AbstractEntity
     /**
      * Set include_routes.
      *
-     * @param string|null $include_routes
-     *
-     * @return TwoFactorAuthConfig
+     * @return $this
      */
-    public function setIncludeRoutes($include_routes = null)
+    public function setIncludeRoutes(?string $include_routes = null): self
     {
         $this->include_routes = $include_routes;
 
         return $this;
     }
 
-    public function removeIncludeRoute(string $route)
+    /**
+     * @return $this
+     */
+    public function removeIncludeRoute(string $route): self
     {
         $routes = $this->getRoutes($this->getIncludeRoutes());
 
@@ -220,20 +188,15 @@ class TwoFactorAuthConfig extends AbstractEntity
     }
 
     /**
-     * @param string|null $plain_api_secret
-     *
-     * @return TwoFactorAuthConfig
+     * @return $this
      */
-    public function setPlainApiSecret(?string $plain_api_secret): TwoFactorAuthConfig
+    public function setPlainApiSecret(?string $plain_api_secret): self
     {
         $this->plain_api_secret = $plain_api_secret;
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getPlainApiSecret(): ?string
     {
         return $this->plain_api_secret;

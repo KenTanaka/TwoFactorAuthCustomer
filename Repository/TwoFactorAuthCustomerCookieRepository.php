@@ -11,14 +11,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Repository;
+namespace Plugin\TwoFactorAuthCustomer44\Repository;
 
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use Eccube\Entity\Customer;
 use Eccube\Repository\AbstractRepository;
 use Eccube\Util\StringUtil;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthCustomerCookie;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthCustomerCookie;
 
 /**
  * TwoFactorAuthConfigRepository.

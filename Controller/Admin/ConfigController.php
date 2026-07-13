@@ -11,42 +11,36 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Controller\Admin;
+namespace Plugin\TwoFactorAuthCustomer44\Controller\Admin;
 
 use Eccube\Controller\AbstractController;
-use Plugin\TwoFactorAuthCustomer42\Form\Type\TwoFactorAuthConfigType;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthConfigRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Plugin\TwoFactorAuthCustomer44\Form\Type\TwoFactorAuthConfigType;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthConfigRepository;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Class SmsController
+ * Class ConfigController
  */
 class ConfigController extends AbstractController
 {
     /**
-     * @var TwoFactorAuthConfigRepository
-     */
-    private $smsConfigRepository;
-
-    /**
      * ConfigController constructor.
      */
-    public function __construct(TwoFactorAuthConfigRepository $smsConfigRepository)
-    {
-        $this->smsConfigRepository = $smsConfigRepository;
+    public function __construct(
+        private readonly TwoFactorAuthConfigRepository $smsConfigRepository,
+    ) {
     }
 
     /**
-     * @Route("/%eccube_admin_route%/two_factor_auth_customer42/config", name="two_factor_auth_customer42_admin_config", methods={"GET", "POST"})
-     * @Template("TwoFactorAuthCustomer42/Resource/template/admin/config.twig")
-     *
      * @param Request $request
      *
      * @return RedirectResponse|array
      */
+    #[Route(path: '/%eccube_admin_route%/two_factor_auth_customer44/config', name: 'two_factor_auth_customer44_admin_config', methods: ['GET', 'POST'])]
+    #[Template('@TwoFactorAuthCustomer44/admin/config.twig')]
     public function index(Request $request)
     {
         // 設定情報、フォーム情報を取得
@@ -72,14 +66,14 @@ class ConfigController extends AbstractController
 
             // フォームの入力データを保存
             $this->entityManager->persist($SmsConfig);
-            $this->entityManager->flush($SmsConfig);
+            $this->entityManager->flush();
 
             // 完了メッセージを表示
             log_info('config', ['status' => 'Success']);
             $this->addSuccess('プラグインの設定を保存しました。', 'admin');
 
             // 設定画面にリダイレクト
-            return $this->redirectToRoute('two_factor_auth_customer42_admin_config');
+            return $this->redirectToRoute('two_factor_auth_customer44_admin_config');
         }
 
         return [

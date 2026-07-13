@@ -25,35 +25,35 @@ jobs:
       - name: Download Plugin
         uses: actions/checkout@master
         with:
-          path: app/Plugin/TwoFactorAuthCustomer42
-      - name: Download Plugin TwoFactorAuthCustomerApp42
+          path: app/Plugin/TwoFactorAuthCustomer44
+      - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
-          path: app/Plugin/TwoFactorAuthCustomerApp42
-      - name: Download Plugin TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          path: app/Plugin/TwoFactorAuthCustomerApp44
+      - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
-          path: app/Plugin/TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Sleep for MySQL
         run: sleep 120s
         shell: bash
       - name: Install Plugin
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
-
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
 
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
+
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console cache:clear
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms44
       - name: Wait 30s for the database to load, (as I do not know the databases active state)
         run: sleep 30s
       - name: Start Load EC-CUBE
@@ -220,17 +220,17 @@ jobs:
       - name: Download Plugin
         uses: actions/checkout@master
         with:
-          path: app/Plugin/TwoFactorAuthCustomer42
-      - name: Download Plugin TwoFactorAuthCustomerApp42
+          path: app/Plugin/TwoFactorAuthCustomer44
+      - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
-          path: app/Plugin/TwoFactorAuthCustomerApp42
-      - name: Download Plugin TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          path: app/Plugin/TwoFactorAuthCustomerApp44
+      - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
-          path: app/Plugin/TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Start Load EC-CUBE
         run: |
           sed -i 's!APP_ENV: "dev"!APP_ENV: "prod"!g' docker-compose.yml
@@ -240,19 +240,19 @@ jobs:
         shell: bash
       - name: Install Plugin
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
-
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
 
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
+
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console cache:clear
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms44
       - name: Wait for 30 seconds for the database to load, (because MySQL is slow to initialize)
         run: sleep 30s
         shell: bash
@@ -438,17 +438,17 @@ jobs:
       - name: Download Plugin
         uses: actions/checkout@master
         with:
-          path: app/Plugin/TwoFactorAuthCustomer42
-      - name: Download Plugin TwoFactorAuthCustomerApp42
+          path: app/Plugin/TwoFactorAuthCustomer44
+      - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
-          path: app/Plugin/TwoFactorAuthCustomerApp42
-      - name: Download Plugin TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          path: app/Plugin/TwoFactorAuthCustomerApp44
+      - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
-          path: app/Plugin/TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Start Load EC-CUBE
         run: |
           sed -i 's!APP_ENV: "dev"!APP_ENV: "prod"!g' docker-compose.yml
@@ -458,19 +458,19 @@ jobs:
         shell: bash
       - name: Install Plugin
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
-
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
 
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
+
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console cache:clear
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.pgsql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms44
       - name: Request home page - PGSQL PLUGIN 10000 PRODUCTS
         run: |
           sudo apt-get install apache2-utils
@@ -678,17 +678,17 @@ jobs:
       - name: Download Plugin
         uses: actions/checkout@master
         with:
-          path: app/Plugin/TwoFactorAuthCustomer42
-      - name: Download Plugin TwoFactorAuthCustomerApp42
+          path: app/Plugin/TwoFactorAuthCustomer44
+      - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
-          path: app/Plugin/TwoFactorAuthCustomerApp42
-      - name: Download Plugin TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          path: app/Plugin/TwoFactorAuthCustomerApp44
+      - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
-          path: app/Plugin/TwoFactorAuthCustomerSms42
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Start Load EC-CUBE
         run: |
           sed -i 's!APP_ENV: "dev"!APP_ENV: "prod"!g' docker-compose.yml
@@ -736,19 +736,19 @@ jobs:
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml logs ec-cube
       - name: Install Plugin
         run: |
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
-
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp42
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomer44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
 
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerApp44
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
-          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms42
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerApp44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
+
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:install --code=TwoFactorAuthCustomerSms44
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console cache:clear
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml exec -T ec-cube bin/console eccube:plugin:enable --code=TwoFactorAuthCustomerSms44
       - name: Restart Load EC-CUBE to wait for MySQL
         run: |
           docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.bench.mysql.yml up -d

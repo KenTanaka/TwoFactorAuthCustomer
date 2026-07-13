@@ -11,15 +11,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42;
+namespace Plugin\TwoFactorAuthCustomer44;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Eccube\Common\EccubeConfig;
 use Eccube\Entity\Layout;
 use Eccube\Entity\Page;
 use Eccube\Entity\PageLayout;
 use Eccube\Plugin\AbstractPluginManager;
-use Eccube\Common\EccubeConfig;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthConfig;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthConfig;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -29,17 +29,17 @@ use Symfony\Component\Filesystem\Filesystem;
 class PluginManager extends AbstractPluginManager
 {
     // 設定対象ページ情報
-    private $pages = [
-        ['plg_customer_2fa_device_auth_send_onetime', 'デバイス認証送信先入力', 'TwoFactorAuthCustomer42/Resource/template/default/device_auth/send'],
-        ['plg_customer_2fa_device_auth_input_onetime', 'デバイス認証トークン入力', 'TwoFactorAuthCustomer42/Resource/template/default/device_auth/input'],
-        ['plg_customer_2fa_auth_type_select', '多要素認証方式選択', 'TwoFactorAuthCustomer42/Resource/template/default/tfa/select_type'],
+    private array $pages = [
+        ['plg_customer_2fa_device_auth_send_onetime', 'デバイス認証送信先入力', 'TwoFactorAuthCustomer44/Resource/template/default/device_auth/send'],
+        ['plg_customer_2fa_device_auth_input_onetime', 'デバイス認証トークン入力', 'TwoFactorAuthCustomer44/Resource/template/default/device_auth/input'],
+        ['plg_customer_2fa_auth_type_select', '多要素認証方式選択', 'TwoFactorAuthCustomer44/Resource/template/default/tfa/select_type'],
     ];
 
     /**
-     * @param array $meta
+     * @param array<string, mixed> $meta
      * @param ContainerInterface $container
      */
-    public function enable(array $meta, ContainerInterface $container)
+    public function enable(array $meta, ContainerInterface $container): void
     {
         $em = $container->get('doctrine')->getManager();
 
@@ -57,7 +57,7 @@ class PluginManager extends AbstractPluginManager
      *
      * @param EntityManagerInterface $em
      */
-    protected function createConfig(EntityManagerInterface $em)
+    protected function createConfig(EntityManagerInterface $em): void
     {
         $TwoFactorAuthConfig = $em->find(TwoFactorAuthConfig::class, 1);
         if ($TwoFactorAuthConfig) {
@@ -75,17 +75,17 @@ class PluginManager extends AbstractPluginManager
      *
      * @param ContainerInterface $container
      */
-    protected function copyTwigFiles(ContainerInterface $container)
+    protected function copyTwigFiles(ContainerInterface $container): void
     {
         // テンプレートファイルコピー
         $templatePath = $container->get(EccubeConfig::class)->get('eccube_theme_front_dir')
-            . '/TwoFactorAuthCustomer42/Resource/template/default';
+            .'/TwoFactorAuthCustomer44/Resource/template/default';
         $fs = new Filesystem();
         if ($fs->exists($templatePath)) {
             return;
         }
         $fs->mkdir($templatePath);
-        $fs->mirror(__DIR__ . '/Resource/template/default', $templatePath);
+        $fs->mirror(__DIR__.'/Resource/template/default', $templatePath);
     }
 
     /**
@@ -93,7 +93,7 @@ class PluginManager extends AbstractPluginManager
      *
      * @param EntityManagerInterface $em
      */
-    protected function createPages(EntityManagerInterface $em)
+    protected function createPages(EntityManagerInterface $em): void
     {
         foreach ($this->pages as $p) {
             $hasPage = $em->getRepository(Page::class)->count(['url' => $p[0]]) > 0;
@@ -123,10 +123,10 @@ class PluginManager extends AbstractPluginManager
     }
 
     /**
-     * @param array $meta
+     * @param array<string, mixed> $meta
      * @param ContainerInterface $container
      */
-    public function disable(array $meta, ContainerInterface $container)
+    public function disable(array $meta, ContainerInterface $container): void
     {
         $em = $container->get('doctrine')->getManager();
 
@@ -142,10 +142,10 @@ class PluginManager extends AbstractPluginManager
      *
      * @param ContainerInterface $container
      */
-    protected function removeTwigFiles(ContainerInterface $container)
+    protected function removeTwigFiles(ContainerInterface $container): void
     {
         $templatePath = $container->get(EccubeConfig::class)->get('eccube_theme_front_dir')
-            . '/TwoFactorAuthCustomer42';
+            .'/TwoFactorAuthCustomer44';
         $fs = new Filesystem();
         $fs->remove($templatePath);
     }
@@ -155,7 +155,7 @@ class PluginManager extends AbstractPluginManager
      *
      * @param EntityManagerInterface $em
      */
-    protected function removePages(EntityManagerInterface $em)
+    protected function removePages(EntityManagerInterface $em): void
     {
         foreach ($this->pages as $p) {
             $Page = $em->getRepository(Page::class)->findOneBy(['url' => $p[0]]);
@@ -171,17 +171,16 @@ class PluginManager extends AbstractPluginManager
     }
 
     /**
-     * @param array $meta
+     * @param array<string, mixed> $meta
      * @param ContainerInterface $container
      */
-    public function uninstall(array $meta, ContainerInterface $container)
+    public function uninstall(array $meta, ContainerInterface $container): void
     {
-        $em = $container->get('doctrine')->getManager();
-
         // twigファイルを削除
         $this->removeTwigFiles($container);
 
         // ページ削除
+        $em = $container->get('doctrine')->getManager();
         $this->removePages($em);
     }
 }

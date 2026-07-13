@@ -11,10 +11,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Form\Type;
+namespace Plugin\TwoFactorAuthCustomer44\Form\Type;
 
 use Eccube\Common\EccubeConfig;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthConfig;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthConfig;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,7 +46,7 @@ class TwoFactorAuthConfigType extends AbstractType
         $this->validator = $validator;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('api_key', TextType::class, [

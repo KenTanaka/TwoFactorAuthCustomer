@@ -11,185 +11,120 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Entity;
+namespace Plugin\TwoFactorAuthCustomer44\Entity;
 
-use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Eccube\Entity\AbstractEntity;
 use Eccube\Entity\Customer;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthCustomerCookieRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * TwoFactorCustomerCookie
- *
- * @ORM\Table(name="plg_two_factor_customer_cookie")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discriminator_type", type="string", length=255)
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthConfigRepository")
- * @UniqueEntity("id")
  */
+#[ORM\Table(name: 'plg_two_factor_customer_cookie')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'discriminator_type', type: Types::STRING, length: 255)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: TwoFactorAuthCustomerCookieRepository::class)]
+#[UniqueEntity('id')]
 class TwoFactorAuthCustomerCookie extends AbstractEntity
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", options={"unsigned":true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private int $id;
-    /**
-     * @var Customer
-     *
-     * @ORM\ManyToOne(targetEntity="Eccube\Entity\Customer", inversedBy="TwoFactorCustomerCookie")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
-     * })
-     */
-    private Customer $Customer;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cookie_name", type="string", nullable=false, length=512)
-     */
-    private string $cookie_name;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cookie_value", type="string", nullable=false, length=512, unique=true)
-     */
-    private string $cookie_value;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="cookie_expire_date", type="datetime", nullable=true)
-     */
-    private ?\DateTime $cookie_expire_date;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    private \DateTime $createdAt;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
-    private \DateTime $updatedAt;
+    #[ORM\Column(name: 'id', type: Types::INTEGER, options: ['unsigned' => true])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
+    #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'TwoFactorAuthCustomerCookies')]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
+    private ?Customer $Customer = null;
+
+    #[ORM\Column(name: 'cookie_name', type: Types::STRING, nullable: false, length: 512)]
+    private string $cookie_name;
+
+    #[ORM\Column(name: 'cookie_value', type: Types::STRING, nullable: false, length: 512, unique: true)]
+    private string $cookie_value;
+
+    #[ORM\Column(name: 'cookie_expire_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $cookie_expire_date = null;
+
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE, nullable: false)]
+    private ?\DateTime $createdAt = null;
+
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE, nullable: false)]
+    private ?\DateTime $updatedAt = null;
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function updatedTimestamps(): void
     {
         $this->setUpdatedAt(new \DateTime('now'));
-        if (!isset($this->createdAt) || $this->getCreatedAt() === null) {
+        if ($this->getCreatedAt() === null) {
             $this->setCreatedAt(new \DateTime('now'));
         }
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     */
     public function setCreatedAt(\DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * @return int
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Customer
-     */
-    public function getCustomer(): Customer
+    public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
-    /**
-     * @param Customer $Customer
-     */
     public function setCustomer(Customer $Customer): void
     {
         $this->Customer = $Customer;
     }
 
-    /**
-     * @return string
-     */
     public function getCookieName(): string
     {
         return $this->cookie_name;
     }
 
-    /**
-     * @param string $cookie_name
-     */
     public function setCookieName(string $cookie_name): void
     {
         $this->cookie_name = $cookie_name;
     }
 
-    /**
-     * @return string
-     */
     public function getCookieValue(): string
     {
         return $this->cookie_value;
     }
 
-    /**
-     * @param string $cookie_value
-     */
     public function setCookieValue(string $cookie_value): void
     {
         $this->cookie_value = $cookie_value;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCookieExpireDate(): \DateTime
+    public function getCookieExpireDate(): ?\DateTime
     {
         return $this->cookie_expire_date;
     }
 
-    /**
-     * @param \DateTime $cookie_expire_date
-     */
     public function setCookieExpireDate(\DateTime $cookie_expire_date): void
     {
         $this->cookie_expire_date = $cookie_expire_date;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param \DateTime $updatedAt
-     */
     public function setUpdatedAt(\DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;

@@ -11,53 +11,38 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Entity;
+namespace Plugin\TwoFactorAuthCustomer44\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Eccube\Entity\AbstractEntity;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * TwoFactorConfig
- *
- * @ORM\Table(name="plg_two_factor_auth_type")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discriminator_type", type="string", length=255)
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthTypeRepository")
- * @UniqueEntity("id")
+ * TwoFactorAuthType
  */
+#[ORM\Table(name: 'plg_two_factor_auth_type')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'discriminator_type', type: Types::STRING, length: 255)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: TwoFactorAuthTypeRepository::class)]
+#[UniqueEntity('id')]
 class TwoFactorAuthType extends AbstractEntity
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", options={"unsigned":true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: Types::INTEGER, options: ['unsigned' => true])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", nullable=false, length=200, unique=true)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, nullable: false, length: 200, unique: true)]
+    private ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="route", type="string", nullable=false, length=200, unique=true)
-     */
-    private $route = null;
+    #[ORM\Column(name: 'route', type: Types::STRING, nullable: false, length: 200, unique: true)]
+    private ?string $route = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_disabled", type="boolean", nullable=false)
-     */
-    private $isDisabled = false;
+    #[ORM\Column(name: 'is_disabled', type: Types::BOOLEAN, nullable: false)]
+    private bool $isDisabled = false;
 
     /**
      * Constructor.
@@ -68,20 +53,16 @@ class TwoFactorAuthType extends AbstractEntity
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -89,11 +70,9 @@ class TwoFactorAuthType extends AbstractEntity
     /**
      * Set name.
      *
-     * @param string $name
-     *
-     * @return TwoFactorAuthType
+     * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -102,10 +81,8 @@ class TwoFactorAuthType extends AbstractEntity
 
     /**
      * Get route.
-     *
-     * @return string
      */
-    public function getRoute()
+    public function getRoute(): ?string
     {
         return $this->route;
     }
@@ -113,28 +90,20 @@ class TwoFactorAuthType extends AbstractEntity
     /**
      * Set route.
      *
-     * @param string $route
-     *
-     * @return TwoFactorAuthType
+     * @return $this
      */
-    public function setRoute($route)
+    public function setRoute(string $route): self
     {
         $this->route = $route;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDisabled(): bool
     {
         return $this->isDisabled;
     }
 
-    /**
-     * @param bool $isDisabled
-     */
     public function setIsDisabled(bool $isDisabled): void
     {
         $this->isDisabled = $isDisabled;

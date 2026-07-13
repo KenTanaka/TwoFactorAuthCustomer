@@ -11,57 +11,39 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Controller;
+namespace Plugin\TwoFactorAuthCustomer44\Controller;
 
 use Eccube\Controller\AbstractController;
 use Eccube\Entity\Customer;
 use Eccube\Repository\CustomerRepository;
-use Plugin\TwoFactorAuthCustomer42\Form\Type\TwoFactorAuthTypeCustomer;
-use Plugin\TwoFactorAuthCustomer42\Service\CustomerTwoFactorAuthService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Plugin\TwoFactorAuthCustomer44\Form\Type\TwoFactorAuthTypeCustomer;
+use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
+use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 
 class TwoFactorAuthCustomerController extends AbstractController
 {
     /**
-     * @var CustomerRepository
-     */
-    protected CustomerRepository $customerRepository;
-
-    /**
-     * @var CustomerTwoFactorAuthService
-     */
-    protected CustomerTwoFactorAuthService $customerTwoFactorAuthService;
-    /**
-     * @var Environment
-     */
-    protected Environment $twig;
-
-    /**
      * TwoFactorAuthCustomerController constructor.
      *
-     * @param CustomerRepository $customerRepository ,
-     * @param CustomerTwoFactorAuthService $customerTwoFactorAuthService ,
+     * @param CustomerRepository $customerRepository
+     * @param CustomerTwoFactorAuthService $customerTwoFactorAuthService
      * @param Environment $twig
      */
     public function __construct(
-        CustomerRepository $customerRepository,
-        CustomerTwoFactorAuthService $customerTwoFactorAuthService,
-        Environment $twig
+        protected CustomerRepository $customerRepository,
+        protected CustomerTwoFactorAuthService $customerTwoFactorAuthService,
+        protected Environment $twig,
     ) {
-        $this->customerRepository = $customerRepository;
-        $this->customerTwoFactorAuthService = $customerTwoFactorAuthService;
-        $this->twig = $twig;
     }
 
     /**
      * (ログイン時)二段階認証設定（選択）画面.
-     *
-     * @Route("/mypage/two_factor_auth/select_type", name="plg_customer_2fa_auth_type_select", methods={"GET", "POST"})
-     * @Template("TwoFactorAuthCustomer42/Resource/template/default/tfa/select_type.twig")
      */
+    #[Route(path: '/mypage/two_factor_auth/select_type', name: 'plg_customer_2fa_auth_type_select', methods: ['GET', 'POST'])]
+    #[Template('@TwoFactorAuthCustomer44/default/tfa/select_type.twig')]
     public function selectAuthType(Request $request)
     {
         if ($this->isTwoFactorAuthed()) {
@@ -106,7 +88,7 @@ class TwoFactorAuthCustomerController extends AbstractController
     /**
      * 認証済みか否か.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isTwoFactorAuthed(): bool
     {

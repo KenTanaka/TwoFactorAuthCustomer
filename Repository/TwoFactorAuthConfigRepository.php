@@ -11,12 +11,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Repository;
+namespace Plugin\TwoFactorAuthCustomer44\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Eccube\Repository\AbstractRepository;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthConfig;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthCustomerCookie;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthConfig;
 
 /**
  * TwoFactorAuthConfigRepository.
@@ -37,7 +36,7 @@ class TwoFactorAuthConfigRepository extends AbstractRepository
     }
 
     /**
-     * @return object|TwoFactorAuthConfig|TwoFactorAuthCustomerCookie|null $result
+     * @return TwoFactorAuthConfig|null
      */
     public function findOne()
     {

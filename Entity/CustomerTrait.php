@@ -11,82 +11,50 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Entity;
+namespace Plugin\TwoFactorAuthCustomer44\Entity;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Eccube\Annotation\EntityExtension;
+use Eccube\Attribute\EntityExtension;
+use Eccube\Entity\Customer;
 
-/**
- * @EntityExtension("Eccube\Entity\Customer")
- */
+#[EntityExtension(Customer::class)]
 trait CustomerTrait
 {
-    /**
-     * @var ?string
-     *
-     * @ORM\Column(name="device_auth_one_time_token", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'device_auth_one_time_token', type: Types::STRING, length: 255, nullable: true)]
     private ?string $device_auth_one_time_token = null;
 
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="device_auth_one_time_token_expire", type="datetimetz", nullable=true)
-     */
-    private $device_auth_one_time_token_expire;
+    #[ORM\Column(name: 'device_auth_one_time_token_expire', type: Types::DATETIMETZ_MUTABLE, nullable: true)]
+    private ?\DateTime $device_auth_one_time_token_expire = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="device_authed", type="boolean", nullable=false, options={"default":false})
-     */
+    #[ORM\Column(name: 'device_authed', type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
     private bool $device_authed = false;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="device_authed_phone_number", type="string", length=14, nullable=true)
-     */
+    #[ORM\Column(name: 'device_authed_phone_number', type: Types::STRING, length: 14, nullable: true)]
     private ?string $device_authed_phone_number = null;
 
     /**
      * 2段階認証機能の設定
-     *
-     * @var int|null
-     *
-     * @ORM\Column(name="two_factor_auth_type", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'two_factor_auth_type', type: Types::INTEGER, nullable: true)]
     private ?int $two_factor_auth_type = null;
 
-    /**
-     * @var TwoFactorAuthType
-     *
-     * @ORM\ManyToOne(targetEntity="\Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="two_factor_auth_type_id", referencedColumnName="id")
-     * })
-     */
-    private $TwoFactorAuthType = null;
+    #[ORM\ManyToOne(targetEntity: TwoFactorAuthType::class)]
+    #[ORM\JoinColumn(name: 'two_factor_auth_type_id', referencedColumnName: 'id')]
+    private ?TwoFactorAuthType $TwoFactorAuthType = null;
 
     /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="\Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthCustomerCookie", mappedBy="Customer")
+     * @var Collection<int, TwoFactorAuthCustomerCookie>|null
      */
+    #[ORM\OneToMany(targetEntity: TwoFactorAuthCustomerCookie::class, mappedBy: 'Customer')]
     private $TwoFactorAuthCustomerCookies;
 
-    /**
-     * @return string
-     */
     public function getDeviceAuthOneTimeToken(): ?string
     {
         return $this->device_auth_one_time_token;
     }
 
-    /**
-     * @param string|null $device_auth_one_time_token
-     */
     public function setDeviceAuthOneTimeToken(?string $device_auth_one_time_token): void
     {
         $this->device_auth_one_time_token = $device_auth_one_time_token;
@@ -94,18 +62,14 @@ trait CustomerTrait
 
     /**
      * Get resetExpire.
-     *
-     * @return \DateTime|null
      */
-    public function getDeviceAuthOneTimeTokenExpire()
+    public function getDeviceAuthOneTimeTokenExpire(): ?\DateTime
     {
         return $this->device_auth_one_time_token_expire;
     }
 
     /**
      * Set oneTimeTokenExpire.
-     *
-     * @param \DateTime|null $resetExpire
      *
      * @return Customer
      */
@@ -116,44 +80,30 @@ trait CustomerTrait
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDeviceAuthed(): bool
     {
         return $this->device_authed;
     }
 
-    /**
-     * @param bool $device_authed
-     */
     public function setDeviceAuthed(bool $device_authed): void
     {
         $this->device_authed = $device_authed;
     }
 
-    /**
-     * @return string
-     */
     public function getDeviceAuthedPhoneNumber(): ?string
     {
         return $this->device_authed_phone_number;
     }
 
-    /**
-     * @param string|null $device_authed_phone_number
-     */
     public function setDeviceAuthedPhoneNumber(?string $device_authed_phone_number): void
     {
         $this->device_authed_phone_number = $device_authed_phone_number;
     }
 
     /**
-     * Get sex.
-     *
-     * @return TwoFactorAuthType|null
+     * Get two-factor auth type.
      */
-    public function getTwoFactorAuthType()
+    public function getTwoFactorAuthType(): ?TwoFactorAuthType
     {
         return $this->TwoFactorAuthType;
     }
@@ -161,26 +111,20 @@ trait CustomerTrait
     /**
      * Set two-factor auth type.
      *
-     * @param TwoFactorAuthType|null $twoFactorAuthType
+     * @return $this
      */
-    public function setTwoFactorAuthType(TwoFactorAuthType $twoFactorAuthType = null)
+    public function setTwoFactorAuthType(?TwoFactorAuthType $twoFactorAuthType = null)
     {
         $this->TwoFactorAuthType = $twoFactorAuthType;
 
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getTwoFactorAuthCustomerCookies(): Collection
     {
         return $this->TwoFactorAuthCustomerCookies;
     }
 
-    /**
-     * @param Collection $TwoFactorAuthCustomerCookies
-     */
     public function setTwoFactorAuthCustomerCookies(Collection $TwoFactorAuthCustomerCookies): void
     {
         $this->TwoFactorAuthCustomerCookies = $TwoFactorAuthCustomerCookies;

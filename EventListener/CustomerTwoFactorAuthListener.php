@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\EventListener;
+namespace Plugin\TwoFactorAuthCustomer44\EventListener;
 
 use Eccube\Common\EccubeConfig;
 use Eccube\Entity\BaseInfo;
@@ -19,9 +19,9 @@ use Eccube\Entity\Customer;
 use Eccube\Entity\Master\CustomerStatus;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Request\Context;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthTypeRepository;
-use Plugin\TwoFactorAuthCustomer42\Repository\TwoFactorAuthCustomerCookieRepository;
-use Plugin\TwoFactorAuthCustomer42\Service\CustomerTwoFactorAuthService;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthCustomerCookieRepository;
+use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -163,10 +163,8 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * ログイン完了 イベントハンドラ.
      *
      * @param LoginSuccessEvent $event
-     *
-     * @return RedirectResponse|void
      */
-    public function onLoginSuccess(LoginSuccessEvent $event)
+    public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         if ($this->requestContext->isAdmin()) {
             // バックエンドURLの場合処理なし
@@ -186,7 +184,9 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         if ($this->requestContext->getCurrentUser()->getTwoFactorAuthType() !== null &&
             $this->requestContext->getCurrentUser()->getTwoFactorAuthType()->isDisabled()) {
             // ユーザーが選択した２段階認証方式は無効になっている場合、ログアウトさせる。
-            return new RedirectResponse($this->router->generate('logout'), 302);
+            $event->setResponse(new RedirectResponse($this->router->generate('logout'), 302));
+
+            return;
         }
 
         $this->multiFactorAuth(

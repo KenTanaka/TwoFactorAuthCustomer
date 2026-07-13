@@ -11,10 +11,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Form\Type;
+namespace Plugin\TwoFactorAuthCustomer44\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-use Plugin\TwoFactorAuthCustomer42\Entity\TwoFactorAuthType;
+use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +24,7 @@ class TwoFactorAuthTypeCustomer extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('two_factor_auth_type', EntityType::class, [

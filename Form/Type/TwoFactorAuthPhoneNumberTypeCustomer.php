@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Plugin\TwoFactorAuthCustomer42\Form\Type;
+namespace Plugin\TwoFactorAuthCustomer44\Form\Type;
 
 use Eccube\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
@@ -22,7 +22,7 @@ class TwoFactorAuthPhoneNumberTypeCustomer extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('phone_number', PhoneNumberType::class, [
