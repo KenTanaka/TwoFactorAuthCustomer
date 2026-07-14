@@ -115,7 +115,7 @@ class TwoFactorAuthCustomerCookie extends AbstractEntity
         return $this->cookie_expire_date;
     }
 
-    public function setCookieExpireDate(\DateTime $cookie_expire_date): void
+    public function setCookieExpireDate(?\DateTime $cookie_expire_date): void
     {
         $this->cookie_expire_date = $cookie_expire_date;
     }
