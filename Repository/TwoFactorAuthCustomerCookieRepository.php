@@ -88,11 +88,9 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
             ->where('tfcc.Customer = :customer_id')
             ->andWhere('tfcc.cookie_name = :cookie_name')
             ->andWhere('tfcc.cookie_expire_date < :expire_date')
-            ->setParameters([
-                'customer_id' => $customer->getId(),
-                'cookie_name' => $cookieName,
-                'expire_date' => $expireDate,
-            ])
+            ->setParameter('customer_id', $customer->getId())
+            ->setParameter('cookie_name', $cookieName)
+            ->setParameter('expire_date', $expireDate)
             ->getQuery()
             ->getResult();
     }
@@ -120,11 +118,9 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
             ->where('tfcc.Customer = :customer_id')
             ->andWhere('tfcc.cookie_name = :cookie_name')
             ->andWhere('tfcc.cookie_expire_date > :expire_date')
-            ->setParameters([
-                'customer_id' => $customer->getId(),
-                'cookie_name' => $cookieName,
-                'expire_date' => $expireDate,
-            ])
+            ->setParameter('customer_id', $customer->getId())
+            ->setParameter('cookie_name', $cookieName)
+            ->setParameter('expire_date', $expireDate)
             ->getQuery()
             ->getResult();
     }
