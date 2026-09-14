@@ -270,9 +270,9 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * @param Customer $Customer
      * @param string $route
      *
-     * @return mixed
+     * @return void
      */
-    private function multiFactorAuth(Event $event, Customer $Customer, string $route): mixed
+    private function multiFactorAuth(Event $event, Customer $Customer, string $route): void
     {
         if (!$this->baseInfo->isTwoFactorAuthUse()) {
             // MFA無効の場合処理なし
