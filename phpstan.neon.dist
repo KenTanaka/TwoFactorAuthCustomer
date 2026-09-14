@@ -5,10 +5,17 @@ parameters:
     excludePaths:
         - Resource/*
         - Tests/bootstrap.php
-        - phpstan/*
-    stubFiles:
-        - phpstan/Customer.stub
-        - phpstan/BaseInfo.stub
     doctrine:
         objectManagerLoader: ../../../tests/object-manager.php
         ormRepositoryClass: Eccube\Repository\AbstractRepository
+    # stubFiles は doctrine.objectManagerLoader が Customer/BaseInfo の
+    # リフレクションを上書きするため EntityExtension メソッドには効かない。
+    ignoreErrors:
+        -
+            message: '#Call to an undefined method Eccube\\Entity\\Customer::(get|set|is)(DeviceAuth|DeviceAuthed|TwoFactorAuth).*#'
+        -
+            message: '#Call to an undefined method Eccube\\Entity\\BaseInfo::(is|set)(TwoFactorAuthUse|OptionActivateDevice)\(\)#'
+        # twilio/sdk のクラスが PHPStan のオートロードに乗らない
+        -
+            message: '#Twilio\\#'
+    reportUnmatchedIgnoredErrors: false

@@ -167,13 +167,14 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
             return;
         }
 
-        if ($this->requestContext->getCurrentUser() === null) {
+        $Customer = $this->requestContext->getCurrentUser();
+        if (!$Customer instanceof Customer) {
             // ログインしていない場合は処理なし
             return;
         }
 
-        if ($this->requestContext->getCurrentUser()->getTwoFactorAuthType() !== null
-            && $this->requestContext->getCurrentUser()->getTwoFactorAuthType()->isDisabled()) {
+        if ($Customer->getTwoFactorAuthType() !== null
+            && $Customer->getTwoFactorAuthType()->isDisabled()) {
             // ユーザーが選択した２段階認証方式は無効になっている場合、ログアウトさせる。
             $event->setResponse(new RedirectResponse($this->router->generate('logout'), Response::HTTP_FOUND));
 
@@ -182,7 +183,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
 
         $this->multiFactorAuth(
             $event,
-            $this->requestContext->getCurrentUser(),
+            $Customer,
             $event->getRequest()->attributes->get('_route'));
     }
 
