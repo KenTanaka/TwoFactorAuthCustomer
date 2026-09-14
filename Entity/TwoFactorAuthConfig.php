@@ -138,6 +138,9 @@ class TwoFactorAuthConfig extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return list<string>
+     */
     private function getRoutes(?string $routes): array
     {
         if (!$routes) {

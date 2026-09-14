@@ -26,11 +26,6 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
-use Twilio\Exceptions\ConfigurationException;
-use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Api\V2010\Account\MessageInstance;
 
 class CustomerPersonalValidationController extends AbstractController
@@ -57,7 +52,7 @@ class CustomerPersonalValidationController extends AbstractController
      * @param Request $request
      * @param string $secret_key
      *
-     * @return array|RedirectResponse
+     * @return array<string, mixed>|RedirectResponse
      */
     #[Route(path: '/two_factor_auth/device_auth/input_onetime/{secret_key}', name: 'plg_customer_2fa_device_auth_input_onetime', requirements: ['secret_key' => '^[a-zA-Z0-9]+$'], methods: ['GET', 'POST'])]
     #[Template('@TwoFactorAuthCustomer44/default/device_auth/input.twig')]
@@ -69,7 +64,6 @@ class CustomerPersonalValidationController extends AbstractController
         }
 
         $error = null;
-        /** @var Customer $Customer */
         $Customer = $this->customerRepository->getProvisionalCustomerBySecretKey($secret_key);
 
         if ($Customer === null) {
@@ -136,13 +130,7 @@ class CustomerPersonalValidationController extends AbstractController
      * @param Request $request
      * @param string $secret_key
      *
-     * @return array|RedirectResponse
-     *
-     * @throws ConfigurationException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws TwilioException
+     * @return array<string, mixed>|RedirectResponse
      */
     #[Route(path: '/two_factor_auth/device_auth/send_onetime/{secret_key}', name: 'plg_customer_2fa_device_auth_send_onetime', requirements: ['secret_key' => '^[a-zA-Z0-9]+$'], methods: ['GET', 'POST'])]
     #[Template('@TwoFactorAuthCustomer44/default/device_auth/send.twig')]
@@ -154,7 +142,6 @@ class CustomerPersonalValidationController extends AbstractController
         }
 
         $error = null;
-        /** @var Customer $Customer */
         $Customer = $this->customerRepository->getProvisionalCustomerBySecretKey($secret_key);
         if ($Customer === null) {
             throw $this->createNotFoundException();
@@ -227,13 +214,6 @@ class CustomerPersonalValidationController extends AbstractController
      * @param string $phoneNumber
      *
      * @return MessageInstance
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws ConfigurationException
-     * @throws TwilioException
-     * @throws \Exception
      */
     private function sendDeviceToken(Customer $Customer, string $phoneNumber): MessageInstance
     {

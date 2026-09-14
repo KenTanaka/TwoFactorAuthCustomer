@@ -5,6 +5,10 @@ parameters:
     excludePaths:
         - Resource/*
         - Tests/bootstrap.php
+        - phpstan/*
+    stubFiles:
+        - phpstan/Customer.stub
+        - phpstan/BaseInfo.stub
     doctrine:
         objectManagerLoader: ../../../tests/object-manager.php
         ormRepositoryClass: Eccube\Repository\AbstractRepository

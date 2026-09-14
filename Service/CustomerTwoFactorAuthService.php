@@ -147,7 +147,7 @@ class CustomerTwoFactorAuthService
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
     public function getDefaultAuthRoutes(): array
     {
@@ -189,17 +189,18 @@ class CustomerTwoFactorAuthService
     /**
      * 要認証ルートを取得.
      *
-     * @return array
+     * @return list<string>
      */
     public function getIncludeRoutes(): array
     {
-        $routes = [];
         $include = $this->twoFactorAuthConfig->getIncludeRoutes();
-        if ($include) {
-            $routes = preg_split('/\R/', $include);
+        if (!$include) {
+            return [];
         }
 
-        return $routes;
+        $routes = preg_split('/\R/', $include);
+
+        return $routes === false ? [] : $routes;
     }
 
     /**

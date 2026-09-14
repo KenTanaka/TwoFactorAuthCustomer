@@ -19,6 +19,7 @@ use Eccube\Repository\CustomerRepository;
 use Plugin\TwoFactorAuthCustomer44\Form\Type\TwoFactorAuthTypeCustomer;
 use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Bridge\Twig\Attribute\Template;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
@@ -41,6 +42,8 @@ class TwoFactorAuthCustomerController extends AbstractController
 
     /**
      * (ログイン時)二段階認証設定（選択）画面.
+     *
+     * @return array<string, mixed>|RedirectResponse
      */
     #[Route(path: '/mypage/two_factor_auth/select_type', name: 'plg_customer_2fa_auth_type_select', methods: ['GET', 'POST'])]
     #[Template('@TwoFactorAuthCustomer44/default/tfa/select_type.twig')]

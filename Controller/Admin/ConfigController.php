@@ -37,7 +37,7 @@ class ConfigController extends AbstractController
     /**
      * @param Request $request
      *
-     * @return RedirectResponse|array
+     * @return RedirectResponse|array<string, mixed>
      */
     #[Route(path: '/%eccube_admin_route%/two_factor_auth_customer44/config', name: 'two_factor_auth_customer44_admin_config', methods: ['GET', 'POST'])]
     #[Template('@TwoFactorAuthCustomer44/admin/config.twig')]

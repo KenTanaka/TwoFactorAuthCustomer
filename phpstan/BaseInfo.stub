@@ -1,0 +1,25 @@
+<?php
+
+namespace Eccube\Entity;
+
+/**
+ * #[EntityExtension] で BaseInfo に載るメソッドを PHPStan に教える。
+ */
+class BaseInfo
+{
+    public function isTwoFactorAuthUse(): bool
+    {
+    }
+
+    public function setTwoFactorAuthUse(bool $two_factor_auth_use): void
+    {
+    }
+
+    public function isOptionActivateDevice(): bool
+    {
+    }
+
+    public function setOptionActivateDevice(bool $option_activate_device): void
+    {
+    }
+}
