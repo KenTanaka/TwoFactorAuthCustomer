@@ -25,7 +25,7 @@ class Event implements EventSubscriberInterface
     /**
      * @var bool
      */
-    private bool $hasActiveAuthType;
+    private readonly bool $hasActiveAuthType;
 
     /**
      * Event constructor.

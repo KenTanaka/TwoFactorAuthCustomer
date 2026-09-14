@@ -33,7 +33,7 @@ class TwoFactorAuthPhoneNumberTypeCustomer extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'plg_customer_2fa';
     }

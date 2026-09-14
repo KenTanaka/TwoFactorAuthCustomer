@@ -44,7 +44,7 @@ class CustomerPersonalValidationController extends AbstractController
      * @param Environment $twig
      */
     public function __construct(
-        private RateLimiterFactory $deviceAuthRequestEmailLimiter,
+        private readonly RateLimiterFactory $deviceAuthRequestEmailLimiter,
         protected CustomerRepository $customerRepository,
         protected CustomerTwoFactorAuthService $customerTwoFactorAuthService,
         protected Environment $twig,

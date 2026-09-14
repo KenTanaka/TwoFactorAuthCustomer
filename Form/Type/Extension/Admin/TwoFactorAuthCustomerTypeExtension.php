@@ -27,19 +27,12 @@ use Symfony\Component\Form\FormEvents;
 class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
 {
     /**
-     * @var EntityManagerInterface
-     */
-    protected EntityManagerInterface $entityManager;
-
-    /**
      * CouponDetailType constructor.
      *
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(
-        EntityManagerInterface $entityManager,
-    ) {
-        $this->entityManager = $entityManager;
+    public function __construct(protected EntityManagerInterface $entityManager)
+    {
     }
 
     /**

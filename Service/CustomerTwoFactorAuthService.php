@@ -28,8 +28,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 use Twilio\Exceptions\ConfigurationException;
 use Twilio\Exceptions\TwilioException;
+use Twilio\Rest\Api\V2010\Account\MessageInstance;
 use Twilio\Rest\Client;
 
 class CustomerTwoFactorAuthService
@@ -77,10 +79,6 @@ class CustomerTwoFactorAuthService
      */
     protected $route_expire;
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
      * @var BaseInfo|null
      */
     private $baseInfo;
@@ -93,7 +91,7 @@ class CustomerTwoFactorAuthService
     /**
      * @var int
      */
-    private int $tokenLength;
+    private readonly int $tokenLength;
 
     /**
      * @var array
@@ -111,17 +109,7 @@ class CustomerTwoFactorAuthService
         'shopping_login',
     ];
 
-    /**
-     * @var TwoFactorAuthCustomerCookieRepository
-     */
-    private TwoFactorAuthCustomerCookieRepository $twoFactorCustomerCookieRepository;
-
-    /**
-     * @var PasswordHasherFactoryInterface
-     */
-    private PasswordHasherFactoryInterface $hashFactory;
-
-    private int $tokenActiveDurationSeconds;
+    private readonly int $tokenActiveDurationSeconds;
 
     /**
      * constructor.
@@ -134,15 +122,14 @@ class CustomerTwoFactorAuthService
      * @param PasswordHasherFactoryInterface $hashFactory
      */
     public function __construct(
-        EntityManagerInterface $entityManager,
+        private readonly EntityManagerInterface $entityManager,
         EccubeConfig $eccubeConfig,
         BaseInfoRepository $baseInfoRepository,
         RequestStack $requestStack,
         TwoFactorAuthConfigRepository $twoFactorAuthConfigRepository,
-        TwoFactorAuthCustomerCookieRepository $twoFactorCustomerCookieRepository,
-        PasswordHasherFactoryInterface $hashFactory,
+        private readonly TwoFactorAuthCustomerCookieRepository $twoFactorCustomerCookieRepository,
+        private readonly PasswordHasherFactoryInterface $hashFactory,
     ) {
-        $this->entityManager = $entityManager;
         $this->eccubeConfig = $eccubeConfig;
 
         $this->baseInfo = $baseInfoRepository->find(1);
@@ -157,8 +144,6 @@ class CustomerTwoFactorAuthService
         $this->tokenActiveDurationSeconds = (int) $this->eccubeConfig->get('plugin_eccube_2fa_one_time_token_expire_after_seconds');
 
         $this->twoFactorAuthConfig = $twoFactorAuthConfigRepository->findOne();
-        $this->twoFactorCustomerCookieRepository = $twoFactorCustomerCookieRepository;
-        $this->hashFactory = $hashFactory;
     }
 
     /**
@@ -169,9 +154,7 @@ class CustomerTwoFactorAuthService
         return $this->default_tfa_routes;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContainer(ContainerBagInterface $container): ?ContainerBagInterface
     {
         $previous = $this->container;
@@ -356,12 +339,12 @@ class CustomerTwoFactorAuthService
      * @param $phoneNumber
      * @param $body
      *
-     * @return \Twilio\Rest\Api\V2010\Account\MessageInstance
+     * @return MessageInstance
      *
      * @throws ConfigurationException
      * @throws TwilioException
      */
-    public function sendBySms($phoneNumber, $body): \Twilio\Rest\Api\V2010\Account\MessageInstance
+    public function sendBySms($phoneNumber, $body): MessageInstance
     {
         // Twilio
         // SMS送信(現在国内電話番号のみ対象)
@@ -444,7 +427,7 @@ class CustomerTwoFactorAuthService
      *
      * @deprecated ECCUBEの最低PHPバージョンは8.0になったら, この関数を消してphp8.0からのstr_containsを利用する
      */
-    private function str_contains(string $haystack, string $needle)
+    private function str_contains(string $haystack, string $needle): bool
     {
         return $needle !== '' && mb_strpos($haystack, $needle) !== false;
     }

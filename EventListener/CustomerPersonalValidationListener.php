@@ -20,6 +20,7 @@ use Eccube\Request\Context;
 use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -48,10 +49,6 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
      */
     protected BaseInfoRepository $baseInfoRepository;
     /**
-     * @var CustomerRepository
-     */
-    protected CustomerRepository $customerRepository;
-    /**
      * @var BaseInfo|null
      */
     protected $baseInfo;
@@ -68,13 +65,12 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
         UrlGeneratorInterface $router,
         CustomerTwoFactorAuthService $customerTwoFactorAuthService,
         BaseInfoRepository $baseInfoRepository,
-        CustomerRepository $customerRepository,
+        protected CustomerRepository $customerRepository,
     ) {
         $this->requestContext = $requestContext;
         $this->router = $router;
         $this->customerTwoFactorAuthService = $customerTwoFactorAuthService;
         $this->baseInfo = $baseInfoRepository->find(1);
-        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -92,7 +88,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
      *
      * @param ControllerArgumentsEvent $event
      */
-    public function onKernelController(ControllerArgumentsEvent $event)
+    public function onKernelController(ControllerArgumentsEvent $event): void
     {
         if (!$event->isMainRequest()) {
             // サブリクエストの場合、処理なし
@@ -140,7 +136,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
      *
      * @throws NotFoundHttpException
      */
-    private function deviceAuth(mixed $event)
+    private function deviceAuth(mixed $event): void
     {
         // アクティベーション
         $secret_key = $event->getRequest()->attributes->get('secret_key');
@@ -162,9 +158,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
                 ['secret_key' => $secret_key]
             );
 
-            $event->setController(function () use ($url) {
-                return new RedirectResponse($url, 302);
-            });
+            $event->setController(fn () => new RedirectResponse($url, Response::HTTP_FOUND));
         }
     }
 }

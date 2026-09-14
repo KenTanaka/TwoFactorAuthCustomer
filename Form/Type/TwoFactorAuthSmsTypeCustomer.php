@@ -32,10 +32,7 @@ class TwoFactorAuthSmsTypeCustomer extends AbstractType
                     'required' => true,
                     'constraints' => [
                         new Assert\NotBlank(),
-                        new Assert\Length([
-                            'max' => 6,
-                            'min' => 6,
-                        ]),
+                        new Assert\Length(max: 6, min: 6),
                     ],
                     'attr' => [
                         'maxlength' => 6,
@@ -47,7 +44,7 @@ class TwoFactorAuthSmsTypeCustomer extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'plg_customer_2fa';
     }

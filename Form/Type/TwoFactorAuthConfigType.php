@@ -33,17 +33,14 @@ class TwoFactorAuthConfigType extends AbstractType
      */
     protected $eccubeConfig;
 
-    protected ValidatorInterface $validator;
-
     /**
      * TwoFactorAuthConfigType constructor.
      *
      * @param EccubeConfig $eccubeConfig
      */
-    public function __construct(EccubeConfig $eccubeConfig, ValidatorInterface $validator)
+    public function __construct(EccubeConfig $eccubeConfig, protected ValidatorInterface $validator)
     {
         $this->eccubeConfig = $eccubeConfig;
-        $this->validator = $validator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -53,41 +50,29 @@ class TwoFactorAuthConfigType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(['max' => $this->eccubeConfig['eccube_stext_len']]),
-                    new Assert\Regex(
-                        [
-                            'pattern' => '/^[a-zA-Z0-9]+$/i',
-                            'message' => 'form_error.graph_only',
-                        ]
-                    ),
+                    new Assert\Length(max: $this->eccubeConfig['eccube_stext_len']),
+                    new Assert\Regex(pattern: '/^[a-zA-Z0-9]+$/i', message: 'form_error.graph_only'),
                 ],
             ])
             ->add('plain_api_secret', TextType::class, [
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(['max' => $this->eccubeConfig['eccube_stext_len']]),
+                    new Assert\Length(max: $this->eccubeConfig['eccube_stext_len']),
                 ],
             ])
             ->add('from_phone_number', TextType::class, [
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(['max' => $this->eccubeConfig['eccube_stext_len']]),
-                    new Assert\Regex(
-                        [
-                            'pattern' => '/^[0-9]+$/i',
-                            'message' => 'form_error.numeric_only',
-                        ]
-                    ),
+                    new Assert\Length(max: $this->eccubeConfig['eccube_stext_len']),
+                    new Assert\Regex(pattern: '/^[0-9]+$/i', message: 'form_error.numeric_only'),
                 ],
             ])
             ->add('include_routes', TextareaType::class, [
                 'required' => false,
                 'constraints' => [
-                    new Assert\Length([
-                        'max' => $this->eccubeConfig['eccube_ltext_len'],
-                    ]),
+                    new Assert\Length(max: $this->eccubeConfig['eccube_ltext_len']),
                 ],
             ]);
 
@@ -97,10 +82,7 @@ class TwoFactorAuthConfigType extends AbstractType
 
             if ($data['plain_api_secret'] !== $this->eccubeConfig['eccube_default_password']) {
                 $errors = $this->validator->validate($data['plain_api_secret'], [
-                    new Assert\Regex([
-                        'pattern' => '/^[a-zA-Z0-9]+$/i',
-                        'message' => 'form_error.graph_only',
-                    ]),
+                    new Assert\Regex(pattern: '/^[a-zA-Z0-9]+$/i', message: 'form_error.graph_only'),
                 ]);
                 if ($errors) {
                     foreach ($errors as $error) {
@@ -116,7 +98,7 @@ class TwoFactorAuthConfigType extends AbstractType
      *
      * @see AbstractType::configureOptions
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => TwoFactorAuthConfig::class,

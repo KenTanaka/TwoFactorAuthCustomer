@@ -25,6 +25,7 @@ use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -50,14 +51,6 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * @var CustomerTwoFactorAuthService
      */
     protected $customerTwoFactorAuthService;
-    /**
-     * @var TwoFactorAuthTypeRepository
-     */
-    protected TwoFactorAuthTypeRepository $twoFactorAuthTypeRepository;
-    /**
-     * @var TwoFactorAuthCustomerCookieRepository
-     */
-    protected TwoFactorAuthCustomerCookieRepository $twoFactorAuthCustomerCookieRepository;
     /**
      * @var BaseInfo|null
      */
@@ -88,8 +81,8 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         Context $requestContext,
         UrlGeneratorInterface $router,
         CustomerTwoFactorAuthService $customerTwoFactorAuthService,
-        TwoFactorAuthTypeRepository $twoFactorAuthTypeRepository,
-        TwoFactorAuthCustomerCookieRepository $twoFactorAuthCustomerCookieRepository,
+        protected TwoFactorAuthTypeRepository $twoFactorAuthTypeRepository,
+        protected TwoFactorAuthCustomerCookieRepository $twoFactorAuthCustomerCookieRepository,
         BaseInfoRepository $baseInfoRepository,
         RequestStack $requestStack,
     ) {
@@ -97,8 +90,6 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         $this->router = $router;
         $this->customerTwoFactorAuthService = $customerTwoFactorAuthService;
         $this->baseInfo = $baseInfoRepository->find(1);
-        $this->twoFactorAuthTypeRepository = $twoFactorAuthTypeRepository;
-        $this->twoFactorAuthCustomerCookieRepository = $twoFactorAuthCustomerCookieRepository;
         $this->session = $requestStack->getSession();
 
         $this->default_routes = $this->customerTwoFactorAuthService->getDefaultAuthRoutes();
@@ -122,7 +113,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      *
      * @param ControllerArgumentsEvent $event
      */
-    public function onKernelController(ControllerArgumentsEvent $event)
+    public function onKernelController(ControllerArgumentsEvent $event): void
     {
         if (!$event->isMainRequest()) {
             // サブリクエストの場合、処理なし
@@ -184,7 +175,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         if ($this->requestContext->getCurrentUser()->getTwoFactorAuthType() !== null
             && $this->requestContext->getCurrentUser()->getTwoFactorAuthType()->isDisabled()) {
             // ユーザーが選択した２段階認証方式は無効になっている場合、ログアウトさせる。
-            $event->setResponse(new RedirectResponse($this->router->generate('logout'), 302));
+            $event->setResponse(new RedirectResponse($this->router->generate('logout'), Response::HTTP_FOUND));
 
             return;
         }
@@ -242,7 +233,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
 
         // URIで認証
         foreach ($targetRoutes as $r) {
-            if ($r != '' && $r !== '/' && strpos($uri, $r) === 0) {
+            if ($r != '' && $r !== '/' && str_starts_with($uri, $r)) {
                 return true;
             }
         }
@@ -305,7 +296,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * @param Event $event
      * @param string|null $route
      */
-    private function selectAuthType(Event $event, ?string $route)
+    private function selectAuthType(Event $event, ?string $route): void
     {
         // [会員] 2段階認証が未設定の場合
         // コールバックURLをセッションへ設定
@@ -314,11 +305,9 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         $url = $this->router->generate('plg_customer_2fa_auth_type_select', [], UrlGeneratorInterface::ABSOLUTE_PATH);
 
         if ($event instanceof ControllerArgumentsEvent) {
-            $event->setController(function () use ($url) {
-                return new RedirectResponse($url, 302);
-            });
+            $event->setController(fn () => new RedirectResponse($url, Response::HTTP_FOUND));
         } else {
-            $event->setResponse(new RedirectResponse($url, 302));
+            $event->setResponse(new RedirectResponse($url, Response::HTTP_FOUND));
         }
     }
 
@@ -327,7 +316,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      *
      * @param string|null $route
      */
-    private function setCallbackRoute(?string $route)
+    private function setCallbackRoute(?string $route): void
     {
         if ($route) {
             $this->session->set(CustomerTwoFactorAuthService::SESSION_CALL_BACK_URL, $route);
@@ -341,16 +330,14 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * @param Customer $Customer
      * @param string|null $route
      */
-    private function auth(Event $event, Customer $Customer, ?string $route)
+    private function auth(Event $event, Customer $Customer, ?string $route): void
     {
         // コールバックURLをセッションへ設定
         $this->setCallbackRoute($route);
         // 選択された多要素認証方式で指定されているルートへリダイレクト
         if ($Customer->getTwoFactorAuthType() !== null && $Customer->getTwoFactorAuthType()->isDisabled()) {
             // ユーザーが選択した２段階認証方式は無効になっている場合、ログアウトさせる。
-            $event->setController(function () {
-                return new RedirectResponse($this->router->generate('logout'), 302);
-            });
+            $event->setController(fn () => new RedirectResponse($this->router->generate('logout'), Response::HTTP_FOUND));
 
             return;
         }
@@ -358,11 +345,9 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         $url = $this->router->generate($Customer->getTwoFactorAuthType()->getRoute());
 
         if ($event instanceof ControllerArgumentsEvent) {
-            $event->setController(function () use ($url) {
-                return new RedirectResponse($url, 302);
-            });
+            $event->setController(fn () => new RedirectResponse($url, Response::HTTP_FOUND));
         } else {
-            $event->setResponse(new RedirectResponse($url, 302));
+            $event->setResponse(new RedirectResponse($url, Response::HTTP_FOUND));
         }
     }
 }

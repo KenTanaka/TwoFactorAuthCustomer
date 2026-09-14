@@ -31,11 +31,9 @@ class TwoFactorAuthTypeCustomer extends AbstractType
                 'label' => 'front.setting.system.two_factor_auth.type',
                 'class' => TwoFactorAuthType::class,
                 'required' => true,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('tfat')
-                        ->where('tfat.isDisabled = :id')
-                        ->setParameter('id', false);
-                },
+                'query_builder' => fn (EntityRepository $er) => $er->createQueryBuilder('tfat')
+                    ->where('tfat.isDisabled = :id')
+                    ->setParameter('id', false),
                 'choice_label' => 'name',
                 'mapped' => true,
             ]);
@@ -44,7 +42,7 @@ class TwoFactorAuthTypeCustomer extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'plg_customer_2fa';
     }
