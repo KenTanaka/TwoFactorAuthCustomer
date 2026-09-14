@@ -29,12 +29,14 @@ jobs:
       - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerApp44
       - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Sleep for MySQL
         run: sleep 120s
@@ -224,12 +226,14 @@ jobs:
       - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerApp44
       - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Start Load EC-CUBE
         run: |
@@ -442,12 +446,14 @@ jobs:
       - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerApp44
       - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Start Load EC-CUBE
         run: |
@@ -682,12 +688,14 @@ jobs:
       - name: Download Plugin TwoFactorAuthCustomerApp44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerApp42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerApp44
       - name: Download Plugin TwoFactorAuthCustomerSms44
         uses: actions/checkout@master
         with:
-          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms44
+          repository: ${{ github.repository_owner }}/TwoFactorAuthCustomerSms42
+          ref: '4.4'
           path: app/Plugin/TwoFactorAuthCustomerSms44
       - name: Start Load EC-CUBE
         run: |
