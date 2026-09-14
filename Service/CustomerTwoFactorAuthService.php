@@ -19,7 +19,6 @@ use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Customer;
 use Eccube\Repository\BaseInfoRepository;
 use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthConfig;
-use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthCustomerCookie;
 use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthConfigRepository;
 use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthCustomerCookieRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
@@ -94,9 +93,9 @@ class CustomerTwoFactorAuthService
     private readonly int $tokenLength;
 
     /**
-     * @var array
+     * @var list<string>
      */
-    private $default_tfa_routes = [
+    private array $default_tfa_routes = [
         'login',
         'mypage_login',
         'mypage',
@@ -213,7 +212,7 @@ class CustomerTwoFactorAuthService
      */
     public function isAuthed(Customer $Customer, ?string $route = null): bool
     {
-        if (!$Customer->getTwoFactorAuthType() === null) {
+        if ($Customer->getTwoFactorAuthType() === null) {
             return false;
         }
 
@@ -250,7 +249,6 @@ class CustomerTwoFactorAuthService
         if ($json = $this->request->cookies->get($cookieName)) {
             $configs = json_decode($json);
 
-            /** @var TwoFactorAuthCustomerCookie[]|null $activeCookies */
             $activeCookies = $this
                 ->twoFactorCustomerCookieRepository
                 ->searchForCookie($Customer, $cookieName);
@@ -337,15 +335,15 @@ class CustomerTwoFactorAuthService
      *
      * TODO: APIエラーハンドルの追加、
      *
-     * @param $phoneNumber
-     * @param $body
+     * @param string $phoneNumber
+     * @param string $body
      *
      * @return MessageInstance
      *
      * @throws ConfigurationException
      * @throws TwilioException
      */
-    public function sendBySms($phoneNumber, $body): MessageInstance
+    public function sendBySms(string $phoneNumber, string $body): MessageInstance
     {
         // Twilio
         // SMS送信(現在国内電話番号のみ対象)
@@ -421,9 +419,10 @@ class CustomerTwoFactorAuthService
         return false;
     }
 
-    /***
+    /**
      * @param string $haystack
      * @param string $needle
+     *
      * @return bool
      *
      * @deprecated ECCUBEの最低PHPバージョンは8.0になったら, この関数を消してphp8.0からのstr_containsを利用する

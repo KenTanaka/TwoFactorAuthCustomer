@@ -78,7 +78,7 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
      * @param Customer $customer
      * @param string $cookieName
      *
-     * @return TwoFactorAuthCustomerCookie[]
+     * @return list<TwoFactorAuthCustomerCookie>
      */
     public function findOldCookies(Customer $customer, string $cookieName): array
     {
@@ -103,12 +103,13 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
         return $this->findOneBy([], ['id' => 'DESC']);
     }
 
-    /***
+    /**
      * 有効クッキーを取得する
      *
      * @param Customer $customer
      * @param string $cookieName
-     * @return TwoFactorAuthCustomerCookie[]
+     *
+     * @return list<TwoFactorAuthCustomerCookie>
      */
     public function searchForCookie(Customer $customer, string $cookieName): array
     {
@@ -125,7 +126,7 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
             ->getResult();
     }
 
-    /***
+    /**
      * 会員のクッキーを削除
      *
      * @param Customer $customer
