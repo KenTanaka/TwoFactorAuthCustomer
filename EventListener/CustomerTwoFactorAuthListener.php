@@ -26,6 +26,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -56,17 +57,21 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      */
     protected $baseInfo;
     /**
-     * @var Session
+     * @var SessionInterface
      */
-    protected $session;
+    protected SessionInterface $session;
     /**
      * 通常（ログイン・マイページ）ルート.
+     *
+     * @var list<string>
      */
-    protected $default_routes;
+    protected array $default_routes;
     /**
      * 重要操作ルート.
+     *
+     * @var list<string>
      */
-    protected $include_routes;
+    protected array $include_routes;
 
     /**
      * @param Context $requestContext
@@ -219,7 +224,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
     /**
      * ルート・URIが対象であるかチェック.
      *
-     * @param array $targetRoutes
+     * @param list<string> $targetRoutes
      * @param string $route
      * @param string $uri
      *
@@ -271,7 +276,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
             return;
         }
 
-        if (count($this->twoFactorAuthTypeRepository->findBy(['isDisabled' => false])) == 0) {
+        if (!$this->twoFactorAuthTypeRepository->hasActiveType()) {
             // 2段階認証プラグインが有効化されていない場合処理なし
             return;
         }

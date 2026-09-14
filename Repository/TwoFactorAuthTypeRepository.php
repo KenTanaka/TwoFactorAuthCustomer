@@ -42,4 +42,19 @@ class TwoFactorAuthTypeRepository extends AbstractRepository
     {
         return $this->findOneBy([], ['id' => 'DESC']);
     }
+
+    /**
+     * 有効な二段階認証方式が1件以上あるか.
+     */
+    public function hasActiveType(): bool
+    {
+        $count = (int) $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.isDisabled = :disabled')
+            ->setParameter('disabled', false)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $count > 0;
+    }
 }

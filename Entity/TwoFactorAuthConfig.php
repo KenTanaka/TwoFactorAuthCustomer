@@ -185,6 +185,9 @@ class TwoFactorAuthConfig extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param array<int, string> $routes
+     */
     private function getRoutesAsString(array $routes): string
     {
         return implode(PHP_EOL, $routes);

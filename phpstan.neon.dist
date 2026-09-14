@@ -18,4 +18,11 @@ parameters:
         # twilio/sdk のクラスが PHPStan のオートロードに乗らない
         -
             message: '#Twilio\\#'
+        # EntityExtension の trait は実行時 proxy に載るため、解析上は未使用になる
+        -
+            identifier: trait.unused
+        # EC-CUBE 本体と同様。new Entity() 時に nullable が必要なプロパティと DB 非 null の差
+        -
+            message: "#^Property .+::\\$.+ type mapping mismatch: property can contain .+\\|null but database expects .+\\.$#"
+            identifier: doctrine.columnType
     reportUnmatchedIgnoredErrors: false

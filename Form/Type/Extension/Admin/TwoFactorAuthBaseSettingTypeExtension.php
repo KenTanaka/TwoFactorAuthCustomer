@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Form\Type\Admin\ShopMasterType;
 use Eccube\Form\Type\ToggleSwitchType;
 use Plugin\TwoFactorAuthCustomer44\Entity\TwoFactorAuthType;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -45,7 +46,7 @@ class TwoFactorAuthBaseSettingTypeExtension extends AbstractTypeExtension
      * buildForm.
      *
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -56,7 +57,9 @@ class TwoFactorAuthBaseSettingTypeExtension extends AbstractTypeExtension
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
 
-            if ($this->entityManager->getRepository(TwoFactorAuthType::class)->count(['isDisabled' => false]) > 0) {
+            /** @var TwoFactorAuthTypeRepository $typeRepository */
+            $typeRepository = $this->entityManager->getRepository(TwoFactorAuthType::class);
+            if ($typeRepository->hasActiveType()) {
                 $form->add('two_factor_auth_use', ToggleSwitchType::class, [
                     'required' => false,
                     'mapped' => true,

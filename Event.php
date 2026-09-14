@@ -34,9 +34,12 @@ class Event implements EventSubscriberInterface
      */
     public function __construct(TwoFactorAuthTypeRepository $twoFactorAuthTypeRepository)
     {
-        $this->hasActiveAuthType = $twoFactorAuthTypeRepository->count(['isDisabled' => false]) > 0;
+        $this->hasActiveAuthType = $twoFactorAuthTypeRepository->hasActiveType();
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getSubscribedEvents(): array
     {
         return [

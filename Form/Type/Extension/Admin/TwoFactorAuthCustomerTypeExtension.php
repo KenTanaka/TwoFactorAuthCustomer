@@ -47,7 +47,7 @@ class TwoFactorAuthCustomerTypeExtension extends AbstractTypeExtension
      * buildForm.
      *
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

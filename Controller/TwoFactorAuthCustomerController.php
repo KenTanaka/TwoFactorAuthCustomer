@@ -53,12 +53,17 @@ class TwoFactorAuthCustomerController extends AbstractController
             return $this->redirectToRoute($this->getCallbackRoute());
         }
 
-        /** @var Customer $Customer */
         $Customer = $this->getUser();
+        if (!$Customer instanceof Customer) {
+            return $this->redirectToRoute('mypage');
+        }
 
         // 2段階認証方式が選択されている場合は、その方式の初回認証画面へ遷移
-        if ($Customer !== null && $Customer->getTwoFactorAuthType() !== null) {
-            return $this->redirectToRoute($Customer->getTwoFactorAuthType()->getRoute());
+        if ($Customer->getTwoFactorAuthType() !== null) {
+            $route = $Customer->getTwoFactorAuthType()->getRoute();
+            if ($route !== null) {
+                return $this->redirectToRoute($route);
+            }
         }
 
         $error = null;
@@ -95,9 +100,8 @@ class TwoFactorAuthCustomerController extends AbstractController
      */
     protected function isTwoFactorAuthed(): bool
     {
-        /** @var Customer $Customer */
         $Customer = $this->getUser();
-        if ($Customer != null && !$this->customerTwoFactorAuthService->isAuthed($Customer, $this->getCallbackRoute())) {
+        if ($Customer instanceof Customer && !$this->customerTwoFactorAuthService->isAuthed($Customer, $this->getCallbackRoute())) {
             return false;
         }
 

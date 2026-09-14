@@ -167,11 +167,11 @@ class CustomerTwoFactorAuthService
      * 2段階認証用Cookie生成.
      *
      * @param Customer $Customer
-     * @param null $route
+     * @param string|null $route
      *
      * @return Cookie
      */
-    public function createAuthedCookie(Customer $Customer, $route = null): Cookie
+    public function createAuthedCookie(Customer $Customer, ?string $route = null): Cookie
     {
         $expire = $this->expire;
         $cookieName = $this->cookieName;
@@ -207,11 +207,11 @@ class CustomerTwoFactorAuthService
      * 認証済みか？
      *
      * @param Customer $Customer
-     * @param null $route
+     * @param string|null $route
      *
      * @return bool
      */
-    public function isAuthed(Customer $Customer, $route = null): bool
+    public function isAuthed(Customer $Customer, ?string $route = null): bool
     {
         if (!$Customer->getTwoFactorAuthType() === null) {
             return false;
