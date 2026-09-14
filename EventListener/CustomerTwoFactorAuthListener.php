@@ -59,7 +59,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      */
     protected TwoFactorAuthCustomerCookieRepository $twoFactorAuthCustomerCookieRepository;
     /**
-     * @var BaseInfo|object|null
+     * @var BaseInfo|null
      */
     protected $baseInfo;
     /**

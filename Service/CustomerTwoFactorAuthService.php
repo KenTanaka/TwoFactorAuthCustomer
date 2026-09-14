@@ -81,7 +81,7 @@ class CustomerTwoFactorAuthService
      */
     private $entityManager;
     /**
-     * @var BaseInfo|object|null
+     * @var BaseInfo|null
      */
     private $baseInfo;
 
@@ -299,9 +299,9 @@ class CustomerTwoFactorAuthService
      * @param string $cookieName
      * @param int $expire
      *
-     * @return mixed
+     * @return Cookie
      */
-    public function createRouteAuthCookie(Customer $Customer, string $cookieName, int $expire): mixed
+    public function createRouteAuthCookie(Customer $Customer, string $cookieName, int $expire): Cookie
     {
         return $this->entityManager->wrapInTransaction(function (EntityManagerInterface $em) use ($expire, $cookieName, $Customer) {
             $cookieData = $this->twoFactorCustomerCookieRepository->generateCookieData(

@@ -107,9 +107,9 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
      *
      * @param Customer $customer
      * @param string $cookieName
-     * @return TwoFactorAuthCustomerCookie[]|null
+     * @return TwoFactorAuthCustomerCookie[]
      */
-    public function searchForCookie(Customer $customer, string $cookieName)
+    public function searchForCookie(Customer $customer, string $cookieName): array
     {
         $expireDate = Carbon::now()->setTimezone('UTC')->format('Y-m-d H:i:s');
 

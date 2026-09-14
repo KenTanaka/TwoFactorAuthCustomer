@@ -71,7 +71,7 @@ trait CustomerTrait
     /**
      * Set oneTimeTokenExpire.
      *
-     * @param mixed|null $deviceAuthOneTimeTokenExpire
+     * @param mixed $deviceAuthOneTimeTokenExpire
      *
      * @return Customer
      */

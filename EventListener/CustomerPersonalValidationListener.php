@@ -52,7 +52,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
      */
     protected CustomerRepository $customerRepository;
     /**
-     * @var BaseInfo|object|null
+     * @var BaseInfo|null
      */
     protected $baseInfo;
 

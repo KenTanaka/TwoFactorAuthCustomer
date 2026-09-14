@@ -36,9 +36,9 @@ class TwoFactorAuthTypeRepository extends AbstractRepository
     }
 
     /**
-     * @return object|TwoFactorAuthType|null $result
+     * @return TwoFactorAuthType|null
      */
-    public function findOne(): object|TwoFactorAuthType|null
+    public function findOne(): ?TwoFactorAuthType
     {
         return $this->findOneBy([], ['id' => 'DESC']);
     }
