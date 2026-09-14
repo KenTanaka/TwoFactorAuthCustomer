@@ -84,7 +84,7 @@ class TwoFactorAuthConfigType extends AbstractType
                 $errors = $this->validator->validate($data['plain_api_secret'], [
                     new Assert\Regex(pattern: '/^[a-zA-Z0-9]+$/i', message: 'form_error.graph_only'),
                 ]);
-                if ($errors) {
+                if (count($errors) > 0) {
                     foreach ($errors as $error) {
                         $form['plain_api_secret']->addError(new FormError($error->getMessage()));
                     }

@@ -32,7 +32,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
-use Symfony\Contracts\EventDispatcher\Event;
 
 class CustomerTwoFactorAuthListener implements EventSubscriberInterface
 {
@@ -137,6 +136,9 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
 
         $route = $event->getRequest()->attributes->get('_route');
         $uri = $event->getRequest()->getRequestUri();
+        if (!is_string($route)) {
+            return;
+        }
 
         $Customer = $this->requestContext->getCurrentUser();
 
@@ -186,10 +188,12 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
             return;
         }
 
+        $route = $event->getRequest()->attributes->get('_route');
         $this->multiFactorAuth(
             $event,
             $Customer,
-            $event->getRequest()->attributes->get('_route'));
+            is_string($route) ? $route : '',
+        );
     }
 
     /**
@@ -263,13 +267,13 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
     /**
      * 多要素認証.
      *
-     * @param Event $event
+     * @param ControllerArgumentsEvent|LoginSuccessEvent $event
      * @param Customer $Customer
      * @param string $route
      *
      * @return void
      */
-    private function multiFactorAuth(Event $event, Customer $Customer, string $route): void
+    private function multiFactorAuth(ControllerArgumentsEvent|LoginSuccessEvent $event, Customer $Customer, string $route): void
     {
         if (!$this->baseInfo->isTwoFactorAuthUse()) {
             // MFA無効の場合処理なし
@@ -299,10 +303,10 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
     /**
      * 多要素認証方式設定画面へリダイレクト.
      *
-     * @param Event $event
+     * @param ControllerArgumentsEvent|LoginSuccessEvent $event
      * @param string|null $route
      */
-    private function selectAuthType(Event $event, ?string $route): void
+    private function selectAuthType(ControllerArgumentsEvent|LoginSuccessEvent $event, ?string $route): void
     {
         // [会員] 2段階認証が未設定の場合
         // コールバックURLをセッションへ設定
@@ -310,11 +314,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         // 2段階認証選択画面へリダイレクト
         $url = $this->router->generate('plg_customer_2fa_auth_type_select', [], UrlGeneratorInterface::ABSOLUTE_PATH);
 
-        if ($event instanceof ControllerArgumentsEvent) {
-            $event->setController(fn () => new RedirectResponse($url, Response::HTTP_FOUND));
-        } else {
-            $event->setResponse(new RedirectResponse($url, Response::HTTP_FOUND));
-        }
+        $this->setRedirect($event, $url);
     }
 
     /**
@@ -332,24 +332,38 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
     /**
      * 2段階認証のディスパッチ.
      *
-     * @param Event $event
+     * @param ControllerArgumentsEvent|LoginSuccessEvent $event
      * @param Customer $Customer
      * @param string|null $route
      */
-    private function auth(Event $event, Customer $Customer, ?string $route): void
+    private function auth(ControllerArgumentsEvent|LoginSuccessEvent $event, Customer $Customer, ?string $route): void
     {
         // コールバックURLをセッションへ設定
         $this->setCallbackRoute($route);
+
+        $authType = $Customer->getTwoFactorAuthType();
+        if ($authType === null) {
+            return;
+        }
+
         // 選択された多要素認証方式で指定されているルートへリダイレクト
-        if ($Customer->getTwoFactorAuthType() !== null && $Customer->getTwoFactorAuthType()->isDisabled()) {
+        if ($authType->isDisabled()) {
             // ユーザーが選択した２段階認証方式は無効になっている場合、ログアウトさせる。
-            $event->setController(fn () => new RedirectResponse($this->router->generate('logout'), Response::HTTP_FOUND));
+            $this->setRedirect($event, $this->router->generate('logout'));
 
             return;
         }
 
-        $url = $this->router->generate($Customer->getTwoFactorAuthType()->getRoute());
+        $routeName = $authType->getRoute();
+        if ($routeName === null) {
+            return;
+        }
 
+        $this->setRedirect($event, $this->router->generate($routeName));
+    }
+
+    private function setRedirect(ControllerArgumentsEvent|LoginSuccessEvent $event, string $url): void
+    {
         if ($event instanceof ControllerArgumentsEvent) {
             $event->setController(fn () => new RedirectResponse($url, Response::HTTP_FOUND));
         } else {

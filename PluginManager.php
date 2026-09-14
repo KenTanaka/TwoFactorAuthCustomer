@@ -28,7 +28,11 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class PluginManager extends AbstractPluginManager
 {
-    // 設定対象ページ情報
+    /**
+     * 設定対象ページ情報
+     *
+     * @var list<array{0: string, 1: string, 2: string}>
+     */
     private array $pages = [
         ['plg_customer_2fa_device_auth_send_onetime', 'デバイス認証送信先入力', 'TwoFactorAuthCustomer44/Resource/template/default/device_auth/send'],
         ['plg_customer_2fa_device_auth_input_onetime', 'デバイス認証トークン入力', 'TwoFactorAuthCustomer44/Resource/template/default/device_auth/input'],
