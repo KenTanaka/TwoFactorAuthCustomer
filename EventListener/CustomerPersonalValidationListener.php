@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,11 +17,9 @@ use Eccube\Entity\BaseInfo;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Repository\CustomerRepository;
 use Eccube\Request\Context;
-use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
 use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -70,7 +68,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
         UrlGeneratorInterface $router,
         CustomerTwoFactorAuthService $customerTwoFactorAuthService,
         BaseInfoRepository $baseInfoRepository,
-        CustomerRepository $customerRepository
+        CustomerRepository $customerRepository,
     ) {
         $this->requestContext = $requestContext;
         $this->router = $router;
@@ -108,8 +106,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
 
         if (
             ($this->baseInfo->isOptionCustomerActivate() && !$this->baseInfo->isOptionActivateDevice())
-            ||
-            !$this->baseInfo->isOptionCustomerActivate()
+            || !$this->baseInfo->isOptionCustomerActivate()
         ) {
             // デバイス認証なし かつ 2段階認証使用しない場合は処理なし
             return;
@@ -143,7 +140,7 @@ class CustomerPersonalValidationListener implements EventSubscriberInterface
      *
      * @throws NotFoundHttpException
      */
-    private function deviceAuth($event)
+    private function deviceAuth(mixed $event)
     {
         // アクティベーション
         $secret_key = $event->getRequest()->attributes->get('secret_key');

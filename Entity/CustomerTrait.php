@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -71,9 +71,11 @@ trait CustomerTrait
     /**
      * Set oneTimeTokenExpire.
      *
+     * @param mixed|null $deviceAuthOneTimeTokenExpire
+     *
      * @return Customer
      */
-    public function setDeviceAuthOneTimeTokenExpire($deviceAuthOneTimeTokenExpire = null)
+    public function setDeviceAuthOneTimeTokenExpire(mixed $deviceAuthOneTimeTokenExpire = null): Customer
     {
         $this->device_auth_one_time_token_expire = $deviceAuthOneTimeTokenExpire;
 

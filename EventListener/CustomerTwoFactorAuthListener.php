@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,8 +19,8 @@ use Eccube\Entity\Customer;
 use Eccube\Entity\Master\CustomerStatus;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Request\Context;
-use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
 use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthCustomerCookieRepository;
+use Plugin\TwoFactorAuthCustomer44\Repository\TwoFactorAuthTypeRepository;
 use Plugin\TwoFactorAuthCustomer44\Service\CustomerTwoFactorAuthService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -91,7 +91,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
         TwoFactorAuthTypeRepository $twoFactorAuthTypeRepository,
         TwoFactorAuthCustomerCookieRepository $twoFactorAuthCustomerCookieRepository,
         BaseInfoRepository $baseInfoRepository,
-        RequestStack $requestStack
+        RequestStack $requestStack,
     ) {
         $this->requestContext = $requestContext;
         $this->router = $router;
@@ -181,8 +181,8 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
             return;
         }
 
-        if ($this->requestContext->getCurrentUser()->getTwoFactorAuthType() !== null &&
-            $this->requestContext->getCurrentUser()->getTwoFactorAuthType()->isDisabled()) {
+        if ($this->requestContext->getCurrentUser()->getTwoFactorAuthType() !== null
+            && $this->requestContext->getCurrentUser()->getTwoFactorAuthType()->isDisabled()) {
             // ユーザーが選択した２段階認証方式は無効になっている場合、ログアウトさせる。
             $event->setResponse(new RedirectResponse($this->router->generate('logout'), 302));
 
@@ -202,7 +202,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      *
      * @return void
      */
-    public function logoutEvent(LogoutEvent $logoutEvent)
+    public function logoutEvent(LogoutEvent $logoutEvent): void
     {
         $Customer = $this->requestContext->getCurrentUser();
         if ($Customer instanceof Customer) {
@@ -210,7 +210,6 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
             $this->twoFactorAuthCustomerCookieRepository->deleteByCustomer($Customer);
         }
     }
-
 
     /**
      * ルート・URIが個別認証対象かチェック.
@@ -273,7 +272,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      *
      * @return mixed
      */
-    private function multiFactorAuth($event, $Customer, $route)
+    private function multiFactorAuth(Event $event, Customer $Customer, string $route): mixed
     {
         if (!$this->baseInfo->isTwoFactorAuthUse()) {
             // MFA無効の場合処理なし
@@ -306,7 +305,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * @param Event $event
      * @param string|null $route
      */
-    private function selectAuthType($event, ?string $route)
+    private function selectAuthType(Event $event, ?string $route)
     {
         // [会員] 2段階認証が未設定の場合
         // コールバックURLをセッションへ設定
@@ -342,7 +341,7 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
      * @param Customer $Customer
      * @param string|null $route
      */
-    private function auth($event, Customer $Customer, ?string $route)
+    private function auth(Event $event, Customer $Customer, ?string $route)
     {
         // コールバックURLをセッションへ設定
         $this->setCallbackRoute($route);
@@ -366,5 +365,4 @@ class CustomerTwoFactorAuthListener implements EventSubscriberInterface
             $event->setResponse(new RedirectResponse($url, 302));
         }
     }
-
 }

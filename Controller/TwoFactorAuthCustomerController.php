@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -71,11 +71,11 @@ class TwoFactorAuthCustomerController extends AbstractController
                 // 2段階認証を有効に更新
                 $this->entityManager->persist($Customer);
                 $this->entityManager->flush();
+
                 // 初回認証を実施
                 return $this->redirectToRoute($TwoFactorAuthType->getRoute());
-            } else {
-                $error = trans('front.2fa.onetime.invalid_message__reinput');
             }
+            $error = trans('front.2fa.onetime.invalid_message__reinput');
         }
 
         return [

@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,27 +29,27 @@ class TwoFactorAuthAppTypeCustomer extends AbstractType
         $builder
             ->add(
                 'device_token', TextType::class, [
-                'label' => 'front.setting.system.two_factor_auth.device_token',
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length([
-                        'max' => 6,
-                        'min' => 6,
-                    ]),
-                ],
-                'attr' => [
-                    'maxlength' => 6,
-                    'style' => 'width: 100px;',
-                ],
-            ])
+                    'label' => 'front.setting.system.two_factor_auth.device_token',
+                    'required' => true,
+                    'constraints' => [
+                        new Assert\NotBlank(),
+                        new Assert\Length([
+                            'max' => 6,
+                            'min' => 6,
+                        ]),
+                    ],
+                    'attr' => [
+                        'maxlength' => 6,
+                        'style' => 'width: 100px;',
+                    ],
+                ])
             ->add(
                 'auth_key', HiddenType::class, [
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(),
-                ],
-            ]);
+                    'required' => true,
+                    'constraints' => [
+                        new Assert\NotBlank(),
+                    ],
+                ]);
     }
 
     /**

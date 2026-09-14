@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -112,11 +112,10 @@ class CustomerPersonalValidationController extends AbstractController
                             'entry_activate',
                             ['secret_key' => $secret_key]
                         );
-                    } else {
-                        // 認証済の場合はスキップ
-                        log_warning('[デバイス認証(SMS)] 既に認証済みの電話番号指定');
-                        $error = trans('front.2fa.onetime.invalid_message__reinput');
                     }
+                    // 認証済の場合はスキップ
+                    log_warning('[デバイス認証(SMS)] 既に認証済みの電話番号指定');
+                    $error = trans('front.2fa.onetime.invalid_message__reinput');
                 }
             } else {
                 $error = trans('front.2fa.onetime.invalid_message__reinput');
@@ -190,9 +189,8 @@ class CustomerPersonalValidationController extends AbstractController
                     'plg_customer_2fa_device_auth_input_onetime',
                     ['secret_key' => $secret_key]
                 );
-            } else {
-                $error = trans('front.2fa.sms.send.failure_message');
             }
+            $error = trans('front.2fa.sms.send.failure_message');
         }
 
         return [
@@ -211,7 +209,7 @@ class CustomerPersonalValidationController extends AbstractController
      *
      * @return bool
      */
-    private function checkDeviceToken($Customer, $token): bool
+    private function checkDeviceToken(Customer $Customer, string $token): bool
     {
         $now = new \DateTime();
 
@@ -237,7 +235,7 @@ class CustomerPersonalValidationController extends AbstractController
      * @throws TwilioException
      * @throws \Exception
      */
-    private function sendDeviceToken(Customer $Customer, string $phoneNumber)
+    private function sendDeviceToken(Customer $Customer, string $phoneNumber): MessageInstance
     {
         // ワンタイムトークン生成・保存
         $token = $this->customerTwoFactorAuthService->generateOneTimeTokenValue();

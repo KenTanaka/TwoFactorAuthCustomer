@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -140,7 +140,7 @@ class CustomerTwoFactorAuthService
         RequestStack $requestStack,
         TwoFactorAuthConfigRepository $twoFactorAuthConfigRepository,
         TwoFactorAuthCustomerCookieRepository $twoFactorCustomerCookieRepository,
-        PasswordHasherFactoryInterface $hashFactory
+        PasswordHasherFactoryInterface $hashFactory,
     ) {
         $this->entityManager = $entityManager;
         $this->eccubeConfig = $eccubeConfig;
@@ -164,7 +164,7 @@ class CustomerTwoFactorAuthService
     /**
      * @return array
      */
-    public function getDefaultAuthRoutes()
+    public function getDefaultAuthRoutes(): array
     {
         return $this->default_tfa_routes;
     }
@@ -188,7 +188,7 @@ class CustomerTwoFactorAuthService
      *
      * @return Cookie
      */
-    public function createAuthedCookie($Customer, $route = null): Cookie
+    public function createAuthedCookie(Customer $Customer, $route = null): Cookie
     {
         $expire = $this->expire;
         $cookieName = $this->cookieName;
@@ -225,7 +225,7 @@ class CustomerTwoFactorAuthService
      * @param Customer $Customer
      * @param null $route
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthed(Customer $Customer, $route = null): bool
     {
@@ -301,7 +301,7 @@ class CustomerTwoFactorAuthService
      *
      * @return mixed
      */
-    public function createRouteAuthCookie(Customer $Customer, string $cookieName, int $expire)
+    public function createRouteAuthCookie(Customer $Customer, string $cookieName, int $expire): mixed
     {
         return $this->entityManager->wrapInTransaction(function (EntityManagerInterface $em) use ($expire, $cookieName, $Customer) {
             $cookieData = $this->twoFactorCustomerCookieRepository->generateCookieData(
@@ -355,11 +355,13 @@ class CustomerTwoFactorAuthService
      *
      * @param $phoneNumber
      * @param $body
+     *
+     * @return \Twilio\Rest\Api\V2010\Account\MessageInstance
+     *
      * @throws ConfigurationException
      * @throws TwilioException
-     * @return \Twilio\Rest\Api\V2010\Account\MessageInstance
      */
-    public function sendBySms($phoneNumber, $body)
+    public function sendBySms($phoneNumber, $body): \Twilio\Rest\Api\V2010\Account\MessageInstance
     {
         // Twilio
         // SMS送信(現在国内電話番号のみ対象)
@@ -384,12 +386,12 @@ class CustomerTwoFactorAuthService
      *
      * @return void
      */
-    public function clear2AuthCookies(Request $request, Response $response)
+    public function clear2AuthCookies(Request $request, Response $response): void
     {
         foreach ($request->cookies->all() as $key => $cookie) {
             if (
-                $this->str_contains($key, $this->cookieName) ||
-                $this->str_contains($key, $this->routeCookieName)
+                $this->str_contains($key, $this->cookieName)
+                || $this->str_contains($key, $this->routeCookieName)
             ) {
                 // クッキーを消す
                 $response->headers->clearCookie($key);
@@ -426,13 +428,13 @@ class CustomerTwoFactorAuthService
 
     public function verifyOneTimeToken(string $hashedToken, string $token): bool
     {
-         if ($this->hashFactory->getPasswordHasher(Customer::class)->verify($hashedToken, $token)) {
-             return true;
-         } elseif ($hashedToken === $this->hashOneTimeToken($token)) {
-             return true;
-         } else {
-             return false;
-         }
+        if ($this->hashFactory->getPasswordHasher(Customer::class)->verify($hashedToken, $token)) {
+            return true;
+        } elseif ($hashedToken === $this->hashOneTimeToken($token)) {
+            return true;
+        }
+
+        return false;
     }
 
     /***

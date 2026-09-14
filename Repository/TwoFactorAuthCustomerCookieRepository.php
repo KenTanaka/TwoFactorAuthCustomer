@@ -5,7 +5,7 @@
  *
  * Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
  *
- * http://www.ec-cube.co.jp/
+ * https://www.ec-cube.co.jp/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -52,10 +52,9 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
         Customer $customer,
         string $cookieName,
         int $expireSeconds,
-        int $CookieValueCharacterLength
+        int $CookieValueCharacterLength,
     ): TwoFactorAuthCustomerCookie {
         /** @var TwoFactorAuthCustomerCookie[]|null $previousCookies */
-
         $previousCookies = $this->findOldCookies($customer, $cookieName);
         foreach ($previousCookies as $cookie) {
             $this->getEntityManager()->remove($cookie);
@@ -80,7 +79,7 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
      *
      * @return float|int|mixed|string
      */
-    public function findOldCookies(Customer $customer, string $cookieName)
+    public function findOldCookies(Customer $customer, string $cookieName): float|int|mixed|string|null
     {
         $expireDate = Carbon::now()->setTimezone('UTC')->format('Y-m-d H:i:s');
 
@@ -98,7 +97,7 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
     /**
      * @return TwoFactorAuthCustomerCookie|null $result
      */
-    public function findOne()
+    public function findOne(): ?TwoFactorAuthCustomerCookie
     {
         return $this->findOneBy([], ['id' => 'DESC']);
     }
@@ -146,5 +145,4 @@ class TwoFactorAuthCustomerCookieRepository extends AbstractRepository
 
         $em->commit();
     }
-
 }
