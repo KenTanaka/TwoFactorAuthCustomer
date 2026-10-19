@@ -55,7 +55,7 @@ class CustomerPersonalValidationController extends AbstractController
      * @return array<string, mixed>|RedirectResponse
      */
     #[Route(path: '/two_factor_auth/device_auth/input_onetime/{secret_key}', name: 'plg_customer_2fa_device_auth_input_onetime', requirements: ['secret_key' => '^[a-zA-Z0-9]+$'], methods: ['GET', 'POST'])]
-    #[Template('@TwoFactorAuthCustomer44/default/device_auth/input.twig')]
+    #[Template('TwoFactorAuthCustomer44/Resource/template/default/device_auth/input.twig')]
     public function deviceAuthInputOneTime(Request $request, $secret_key)
     {
         if ($this->isGranted('ROLE_USER')) {
@@ -133,7 +133,7 @@ class CustomerPersonalValidationController extends AbstractController
      * @return array<string, mixed>|RedirectResponse
      */
     #[Route(path: '/two_factor_auth/device_auth/send_onetime/{secret_key}', name: 'plg_customer_2fa_device_auth_send_onetime', requirements: ['secret_key' => '^[a-zA-Z0-9]+$'], methods: ['GET', 'POST'])]
-    #[Template('@TwoFactorAuthCustomer44/default/device_auth/send.twig')]
+    #[Template('TwoFactorAuthCustomer44/Resource/template/default/device_auth/send.twig')]
     public function deviceAuthSendOneTime(Request $request, $secret_key)
     {
         if ($this->isGranted('ROLE_USER')) {
@@ -227,7 +227,7 @@ class CustomerPersonalValidationController extends AbstractController
         $this->entityManager->flush();
 
         // ワンタイムトークン送信メッセージをレンダリング
-        $twig = '@TwoFactorAuthCustomer44/default/sms/onetime_message.twig';
+        $twig = 'TwoFactorAuthCustomer44/Resource/template/default/sms/onetime_message.twig';
         $body = $this->twig->render($twig, [
             'Customer' => $Customer,
             'token' => $token,

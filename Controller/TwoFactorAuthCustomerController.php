@@ -46,7 +46,7 @@ class TwoFactorAuthCustomerController extends AbstractController
      * @return array<string, mixed>|RedirectResponse
      */
     #[Route(path: '/mypage/two_factor_auth/select_type', name: 'plg_customer_2fa_auth_type_select', methods: ['GET', 'POST'])]
-    #[Template('@TwoFactorAuthCustomer44/default/tfa/select_type.twig')]
+    #[Template('TwoFactorAuthCustomer44/Resource/template/default/tfa/select_type.twig')]
     public function selectAuthType(Request $request)
     {
         if ($this->isTwoFactorAuthed()) {
